@@ -76,6 +76,7 @@ public:
                     { return m_TextEditor; }
     _NoteTitleLineEdit* _GetTitleLineEdit() const
                     { return m_NoteTitleLineEdit; }
+
     bool _IsLocking() const
                     { return mb_IsLocking; }
     QToolButton* _GetLockButton() const
@@ -170,8 +171,6 @@ public slots:
     void _SetNoteCategories_ToDo();
     void _SetNoteCategoriesIs_Later();
 
-    void _WriteSettings();
-    void _ReadSettings();
     void _SaveCurrentNoteSlot();
 
     bool _LockCurrentNoteSlot();
@@ -249,7 +248,6 @@ protected:
     bool mb_IsLocking;  // 用于判断当前笔记是否被锁定
 
     bool event(QEvent *_Event);
-    void closeEvent(QCloseEvent *_Event);
     void keyPressEvent(QKeyEvent *_Event);
 
     void _CreateActionsAndSubMenu();

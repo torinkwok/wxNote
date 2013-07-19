@@ -387,6 +387,13 @@
                                                                     : _Title);
         }
 
+    /* closeEvent()函数重写 */
+    void _MainWindowNormal::closeEvent(QCloseEvent *_Event)
+        {
+        _WriteSettings();
+        _Event->accept();
+        }
+
     /////////////////////////////////////////////////////////////////////////
     //..protected部分
 
@@ -524,13 +531,6 @@
         m_MainWinToolBar->addSeparator();
 
         m_MainWinToolBar->addWidget(m_OneKeyLockToolButton);
-        }
-
-    /* closeEvent()函数重写 */
-    void _MainWindowNormal::closeEvent(QCloseEvent *_Event)
-        {
-        _WriteSettings();
-        _Event->accept();
         }
 
     /* _WriteSettings()函数实现 */

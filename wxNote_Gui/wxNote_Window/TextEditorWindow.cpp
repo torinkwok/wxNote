@@ -117,43 +117,8 @@
         connect(this, SIGNAL(_CurrentNoteBeRestoreSignal(bool)),
                 this, SLOT(_CurrentNoteBeRestroeSlot(bool)));
 
-        _ReadSettings();
         setWindowTitle(tr("编辑笔记"));
         setWindowIcon(QIcon(":/wxNote_Icons/wxNoteicon.png"));
-        }
-
-    /* _WriteSettings()槽实现 */
-    void _TextEditorWindow::_WriteSettings()
-        {
-        using namespace wxNote;
-
-        g_Settings.beginGroup("TextEditor");
-    #if 0
-        g_Settings.setValue("Geometry", saveGeometry());
-        g_Settings.setValue("Font ComboBox Font",
-                           m_FontComboBox->currentFont().toString());
-        g_Settings.setValue("Font Dialog Font",
-                           m_SelectFontDialog->currentFont().toString());
-        g_Settings.setValue("Font ComboBox Index", m_FontComboBox->currentIndex());
-    #endif
-        g_Settings.endGroup();
-        }
-
-    /* _ReadSettings()槽实现 */
-    void _TextEditorWindow::_ReadSettings()
-        {
-        using namespace wxNote;
-
-        g_Settings.beginGroup("TextEditor");
-    #if 0
-        restoreGeometry(g_Settings.value("Geometry").toByteArray());
-        m_FontComboBox->setCurrentFont(
-                    QFont(g_Settings.value("Font ComboBox Font").toString()));
-        m_SelectFontDialog->setCurrentFont(
-                    QFont(g_Settings.value("Font Dialog Font").toString()));
-        m_FontComboBox->setCurrentIndex(g_Settings.value("Font Dialog Font").toInt());
-    #endif
-        g_Settings.endGroup();
         }
 
     /* _SetEliminateOrRestoreToolBarHiddewn()函数实现 */
@@ -1249,12 +1214,6 @@
             }
 
         return false;
-        }
-
-    /* closeEvent()函数重写 */
-    void _TextEditorWindow::closeEvent(QCloseEvent */*_Event*/)
-        {
-        _WriteSettings();
         }
 
     /* keyPressEvet()函数重写 */
