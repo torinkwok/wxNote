@@ -418,21 +418,18 @@
         /* "查看"菜单项中的QMenu或QAction的创建和设置 */
         m_DisplayLeftPanelAction = new QAction(tr("显示左面板(&H)"), this);
         m_DisplayLeftPanelAction->setCheckable(true);
-//        m_DisplayLeftPanelAction->setChecked(true);
         m_DisplayLeftPanelAction->setShortcut(tr("F10"));
         connect(m_DisplayLeftPanelAction, SIGNAL(toggled(bool)),
                 this, SLOT(_SetLeftPanelIsHidden(bool)));
 
         m_DisplayNoteListAction = new QAction(tr("显示笔记列表(&O)"), this);
         m_DisplayNoteListAction->setCheckable(true);
-//        m_DisplayNoteListAction->setChecked(true);
         m_DisplayNoteListAction->setShortcut(tr("F11"));
         connect(m_DisplayNoteListAction, SIGNAL(toggled(bool)),
                 this, SLOT(_SetNoteListIsHidden(bool)));
 
         m_DisplayNotePanelAction = new QAction(tr("显示笔记面板(&W)"), this);
         m_DisplayNotePanelAction->setCheckable(true);
-//        m_DisplayNotePanelAction->setChecked(true);
         m_DisplayNotePanelAction->setShortcut(tr("Ctrl+F11"));
         connect(m_DisplayNotePanelAction, SIGNAL(toggled(bool)),
                 this, SLOT(_SetNotePanelIsHidden(bool)));
