@@ -100,6 +100,8 @@ public:
 
     _NoteListItem* _GetFirstNoteInSpecifiedNoteBook(const QString& _NoteBookName);
 
+    void closeEvent(QCloseEvent *_Event);
+
 signals:
     void _MainWindowNormalTitleChangedSignal(const QString& _NewTitle);
 
@@ -135,6 +137,10 @@ public slots:
 protected slots:
     void _WriteSettings();
     void _ReadSettings();
+
+    void _SetLeftPanelIsHidden(bool _IsHidden);
+    void _SetNoteListIsHidden(bool _IsHidden);
+    void _SetNotePanelIsHidden(bool _IsHidden);
 
     void _wxNote_TabWidgetChangedSlot(int _TabIndex);
 
@@ -186,8 +192,6 @@ protected:
     void _CreateMainWinToolBar();
     void _CreateToolButtonOnToolBar();
     void _CreateContextMenu();
-
-    void closeEvent(QCloseEvent *_Event);
 
     void _Create_wxNoteTabWidget();
     void _CreateNoteBookTree();
@@ -294,6 +298,11 @@ protected:
     QAction* m_NewNoteAction;
     QAction* m_NewNoteBookAction;
     QMenu*   m_NewNoteSubMenuOnToolButton;
+
+    /* "查看"菜单项中的QMenu或QAction */
+    QAction* m_DisplayLeftPanelAction;
+    QAction* m_DisplayNoteListAction;
+    QAction* m_DisplayNotePanelAction;
 
     /* "笔记"菜单项中的QMenu或QAction */
     QAction* m_DeletedNoteBookAction;

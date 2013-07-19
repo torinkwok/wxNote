@@ -233,13 +233,7 @@
                                                 .trimmed().left(_Cnt));
         /* 除去标题两头的空格 */
         m_NoteTitleLineEdit->setText(m_NoteTitleLineEdit->text().trimmed());
-    #if 0
-        if (_CheckHadDuplicationOfNoteName(m_NoteTitleLineEdit->text()))
-            {
-            m_NoteTitleLineEdit->setText(wxNote::g_NonTitleNoteName);
-            return;
-            }
-    #endif
+
         /////////////////////////////////////////////////////////////////////
         /// 如果当前笔记内存在图片, 那么使用第一张图片作为该笔记项的图标
         ///
@@ -313,7 +307,10 @@
         {
         /* 对当前编辑器的文本进行简化等处理后取前400个字符作为笔记项的预览文本 */
         QString _PreviewText =
-                m_TextEditor->toPlainText().trimmed().simplified().left(400);
+                m_TextEditor->toPlainText()
+                                .trimmed()
+                                .simplified()
+                                .left(_PreivewTextMaximunCnt);
 
         emit _SetNoteListPreview(this, _NoteTitle, _PreviewText);
         }

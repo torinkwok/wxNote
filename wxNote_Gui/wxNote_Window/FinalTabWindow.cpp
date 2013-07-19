@@ -180,6 +180,8 @@
     /* closeEvent()函数实现 */
     void _FinalTabWindow::closeEvent(QCloseEvent *_Event)
         {
+        m_NormalMainWindow->closeEvent(_Event);
+
         _WriteSettings();
         _Event->accept();
         }

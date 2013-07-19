@@ -244,6 +244,7 @@ protected slots:
 protected:
     enum { _FontMinSize = 8, _FontMaxSize = 96 };
     enum { _SoLongTitleStd = 13 };
+    enum { _PreivewTextMaximunCnt = 500 };
     bool mb_IsChanged;  // 用于判断当前笔记是否被更改
     bool mb_IsLocking;  // 用于判断当前笔记是否被锁定
 

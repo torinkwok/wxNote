@@ -408,6 +408,28 @@
 
         m_NewNoteSubMenuOnToolButton->addAction(m_NewNoteBookAction);
 
+        /* "查看"菜单项中的QMenu或QAction的创建和设置 */
+        m_DisplayLeftPanelAction = new QAction(tr("显示左面板(&H)"), this);
+        m_DisplayLeftPanelAction->setCheckable(true);
+//        m_DisplayLeftPanelAction->setChecked(true);
+        m_DisplayLeftPanelAction->setShortcut(tr("F10"));
+        connect(m_DisplayLeftPanelAction, SIGNAL(toggled(bool)),
+                this, SLOT(_SetLeftPanelIsHidden(bool)));
+
+        m_DisplayNoteListAction = new QAction(tr("显示笔记列表(&O)"), this);
+        m_DisplayNoteListAction->setCheckable(true);
+//        m_DisplayNoteListAction->setChecked(true);
+        m_DisplayNoteListAction->setShortcut(tr("F11"));
+        connect(m_DisplayNoteListAction, SIGNAL(toggled(bool)),
+                this, SLOT(_SetNoteListIsHidden(bool)));
+
+        m_DisplayNotePanelAction = new QAction(tr("显示笔记面板(&W)"), this);
+        m_DisplayNotePanelAction->setCheckable(true);
+//        m_DisplayNotePanelAction->setChecked(true);
+        m_DisplayNotePanelAction->setShortcut(tr("Ctrl+F11"));
+        connect(m_DisplayNotePanelAction, SIGNAL(toggled(bool)),
+                this, SLOT(_SetNotePanelIsHidden(bool)));
+
         /* "笔记"菜单项中的QMenu或QAction的创建和设置 */
         m_DeletedNoteBookAction = new QAction(tr("删除笔记本(&N)"), this);
         m_DeletedNoteBookAction->setEnabled(false);
@@ -436,6 +458,10 @@
         {
         m_FileMenu->addAction(m_NewNoteAction);
         m_FileMenu->addAction(m_NewNoteBookAction);
+
+        m_ViewMenu->addAction(m_DisplayLeftPanelAction);
+        m_ViewMenu->addAction(m_DisplayNoteListAction);
+        m_ViewMenu->addAction(m_DisplayNotePanelAction);
 
         m_NoteMenu->addAction(m_DeletedNoteBookAction);
         m_NoteMenu->addSeparator();
@@ -513,6 +539,7 @@
         using namespace wxNote;
 
         g_Settings.beginGroup("MainWindow");
+
             g_Settings.setValue("Geometry", saveGeometry());
             g_Settings.setValue("RightSplitterStatus", m_RightSplitter->saveState());
             g_Settings.setValue("RightSplitterGeometry", m_RightSplitter->saveGeometry());
@@ -520,6 +547,11 @@
             g_Settings.setValue("CenterSplitterGeometry", m_CenterSplitter->saveGeometry());
             g_Settings.setValue("MainSplitterStatus", m_MainSplitter->saveState());
             g_Settings.setValue("MainSplitterGeometry", m_MainSplitter->saveGeometry());
+
+            g_Settings.setValue("IsLeftPanelActionIsChecked", m_DisplayLeftPanelAction->isChecked());
+            g_Settings.setValue("IsNoteListActionChecked", m_DisplayNoteListAction->isChecked());
+            g_Settings.setValue("IsNotePanelIsHidden", m_DisplayNotePanelAction->isChecked());
+
         g_Settings.endGroup();
         }
 
@@ -529,6 +561,7 @@
         using namespace wxNote;
 
         g_Settings.beginGroup("MainWindow");
+
             restoreGeometry(g_Settings.value("Geometry").toByteArray());
             m_RightSplitter->restoreState(
                         g_Settings.value("RightSplitterStatus").toByteArray());
@@ -542,7 +575,43 @@
                         g_Settings.value("MainSplitterStatus").toByteArray());
             m_MainSplitter->restoreGeometry(
                         g_Settings.value("MainSplitterGeometry").toByteArray());
+
+            bool _IsLeftPanelHiddenActionChecked = g_Settings
+                                                    .value("IsLeftPanelActionIsChecked", true)
+                                                    .toBool();
+            bool _IsNoteListHiddenActionChecked = g_Settings
+                                                    .value("IsNoteListActionChecked", true)
+                                                    .toBool();
+            bool _IsNotePanelHiddenActionChecked = g_Settings
+                                                    .value("IsNotePanelIsHidden", true)
+                                                    .toBool();
+            m_DisplayLeftPanelAction->setChecked(_IsLeftPanelHiddenActionChecked);
+            m_DisplayNoteListAction->setChecked(_IsNoteListHiddenActionChecked);
+            m_DisplayNotePanelAction->setChecked(_IsNotePanelHiddenActionChecked);
+
+            _SetLeftPanelIsHidden(_IsLeftPanelHiddenActionChecked);
+            _SetNoteListIsHidden(_IsNoteListHiddenActionChecked);
+            _SetNotePanelIsHidden(_IsNotePanelHiddenActionChecked);
+
         g_Settings.endGroup();
+        }
+
+    /* _SetLeftPanelIsHidden()槽实现 */
+    void _MainWindowNormal::_SetLeftPanelIsHidden(bool _IsHidden)
+        {
+        m_wxNoteTabWidget->setHidden(!_IsHidden);
+        }
+
+    /* _SetNoteListIsHidden()槽实现 */
+    void _MainWindowNormal::_SetNoteListIsHidden(bool _IsHidden)
+        {
+        m_NoteListSplitter->setHidden(!_IsHidden);
+        }
+
+    /* _SetNotePanelIsHidden()槽实现 */
+    void _MainWindowNormal::_SetNotePanelIsHidden(bool _IsHidden)
+        {
+        m_EditorPanel->setHidden(!_IsHidden);
         }
 
     /* _Create_wxNoteTabWidget()函数实现 */
