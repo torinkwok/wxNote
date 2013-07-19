@@ -104,27 +104,7 @@
 
     /////////////////////////////////////////////////////////////////////////
     //..protected部分
-#if 0
-    /* _NewNoteBookSlot()槽实现 */
-    void _NoteBookTree::_NewNoteBookSlot()
-        {
 
-        }
-
-    /* _RenameNoteBookSlot()槽实现 */
-    void _NoteBookTree::_RenameNoteBookSlot()
-        {
-
-        }
-
-    /* _DeleteNoteBookSlot()槽实现 */
-    void _NoteBookTree::_DeleteNoteBookSlot()
-        {
-
-        }
-#endif
-
-#if 1 // BUG!
     /* _CreateActionOnContextMenu()函数实现 */
     void _NoteBookTree::_CreateActionsOnContextMenu()
         {
@@ -152,7 +132,6 @@
         addAction(m_DeleteNoteBookAction);
         setContextMenuPolicy(Qt::ActionsContextMenu);
         }
-#endif
 
  ////////////////////////////////////////////////////////////////////////////
 
