@@ -62,6 +62,8 @@ class QFont;
 
 namespace wxNote
     {
+    extern QSettings g_Settings;
+
     typedef enum { _Normal, _Shadow } _ParentWindowType;
 
     typedef enum
@@ -70,6 +72,9 @@ namespace wxNote
 
     typedef enum
         { _NonRating, _Poor, _Fair, _Average, _Good, _Excellent } _NoteRating;
+
+    /* 用于存储用户创建的所有笔记本的名称, 不允许重复 */
+    extern QStringList g_UserNoteBookNameList;
 
     /* 用于存储新建的编辑窗口的指针, 在wxNote_Global.cpp中定义 */
     extern QList<_TextEditorWindow *> g_AllTextEditorList;
@@ -136,8 +141,6 @@ namespace wxNote
     extern QString g_CheckBoxHTML;
 
     extern QFont g_StandardFont;
-
-    extern QSettings g_Settings;
 
     /* 用于检测程序中的致命空指针 */
     inline void _PointerChecker(const void* _SomePtr);

@@ -549,6 +549,8 @@
             g_Settings.setValue("IsNoteListActionChecked", m_DisplayNoteListAction->isChecked());
             g_Settings.setValue("IsNotePanelIsHidden", m_DisplayNotePanelAction->isChecked());
 
+            g_Settings.setValue("UserNoteBookNames", g_UserNoteBookNameList);
+
         g_Settings.endGroup();
         }
 
@@ -871,7 +873,7 @@
         {
         /* 只有在拥有可删除笔记本时, 才会解禁 */
         _SetDeleteNoteBookAction_MenuEnabled(
-                    !m_NoteBookNameList.isEmpty()
+                    !wxNote::g_UserNoteBookNameList.isEmpty()
                         && m_NoteBookTree->currentItem()->text(0) != wxNote::g_NoteBooksName
                         && m_NoteBookTree->currentItem()->text(0) != wxNote::g_AllNotesName
                         && m_NoteBookTree->currentItem()->text(0) != wxNote::g_TrashName
@@ -1285,7 +1287,7 @@
             QString _NewNoteBookName = _GetNameDialog._GetLineEditText();
 
             /* 防止用户创建相同名称的笔记本 */
-            for (const QString& _Elem : m_NoteBookNameList)
+            for (const QString& _Elem : wxNote::g_UserNoteBookNameList)
                 {
                 if (_NewNoteBookName == _Elem)
                     {
@@ -1310,7 +1312,7 @@
 
             m_NoteBookTree->setCurrentItem(_NewNoteItem, 0);
 
-            m_NoteBookNameList.push_back(_NewNoteBookName);
+            wxNote::g_UserNoteBookNameList.push_back(_NewNoteBookName);
             m_NoteBookTree->_NoteBookCountIncreaseSlot();
 
             _ClearSearchLineEdit();
@@ -2158,15 +2160,17 @@
     void _MainWindowNormal
         ::_EraseNoteBookName_WhenDeleted(const QString &_NoteBookName)
         {
+        using namespace wxNote;
+
         auto _Iter =
-                std::remove_if(m_NoteBookNameList.begin(), m_NoteBookNameList.end(),
+                std::remove_if(g_UserNoteBookNameList.begin(), g_UserNoteBookNameList.end(),
                                [&_NoteBookName](const QString& _Elem)
                                     {
                                     return _Elem == _NoteBookName;
                                     });
 
-        if (_Iter != m_NoteBookNameList.end())
-            m_NoteBookNameList.erase(_Iter, m_NoteBookNameList.end());
+        if (_Iter != g_UserNoteBookNameList.end())
+            g_UserNoteBookNameList.erase(_Iter, g_UserNoteBookNameList.end());
         }
 
     /* _EraseLastPitchOnItem_inNoteBookList()函数实现 */

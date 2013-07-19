@@ -259,9 +259,6 @@ protected:
 
     QBrush  m_MatchNoteItemDye;
 
-    /* 用于存储用户创建的所有笔记本的名称, 不允许重复 */
-    QStringList            m_NoteBookNameList;
-
     /* 存储每个笔记本中最后一个被选中的笔记项 */
     QList<QPair<QString, _NoteListItem *>> m_LastPitchOnItemList_NoteBookTree;
     QList<QPair<QString, _NoteListItem *>> m_LastPitchOnItemList_CategoriesTree;

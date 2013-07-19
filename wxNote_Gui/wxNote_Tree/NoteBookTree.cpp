@@ -76,6 +76,8 @@
         setIconSize(QSize(30,30));
         setHeaderLabels(QStringList() << wxNote::g_NoteBooksName);
         setHeaderHidden(true);
+
+        _RestoreUsersNoteBook();
         }
 
     /* _NoteBookCountIncreaseSlot()槽实现 */
@@ -131,6 +133,29 @@
         addAction(m_RenameAction);
         addAction(m_DeleteNoteBookAction);
         setContextMenuPolicy(Qt::ActionsContextMenu);
+        }
+
+    /* _RestoreUsersNoteBook()函数实现 */
+    void _NoteBookTree::_RestoreUsersNoteBook()
+        {
+        using namespace wxNote;
+
+        g_Settings.beginGroup("MainWindow");
+
+            QStringList _UserNoteBookNameList =
+                    g_Settings.value("UserNoteBookNames").toStringList();
+
+        g_Settings.endGroup();
+
+        g_UserNoteBookNameList = _UserNoteBookNameList;
+
+        for (const QString& _Elem : _UserNoteBookNameList)
+            {
+            QTreeWidgetItem* _NewNoteBookItem =
+                    new QTreeWidgetItem(m_NoteBookRootItem, QStringList() << _Elem);
+
+            _NewNoteBookItem->setIcon(0, QIcon(":/wxNote_Icons/noteBook.png"));
+            }
         }
 
  ////////////////////////////////////////////////////////////////////////////

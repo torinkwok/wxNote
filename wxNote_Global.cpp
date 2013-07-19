@@ -43,6 +43,10 @@
 
 namespace wxNote
     {
+    QSettings g_Settings("Tong G.", "wxNote");
+
+    QStringList g_UserNoteBookNameList;
+
     /* 用于存储新建的编辑窗口的指针 */
     QList<_TextEditorWindow *> g_AllTextEditorList;
 
@@ -140,8 +144,6 @@ namespace wxNote
     QString g_CheckBoxHTML("<img src=\"file:///C:/Users/ADMINI~1/AppData/Local/Temp/enhtmlclip/entodo_unchecked.png\" />");
 
     QFont g_StandardFont("微软雅黑", 9, 9);
-
-    QSettings g_Settings("Tong G.", "wxNote");
 
     /* _PointerChecker()函数实现
      * 用于检测程序中的致命空指针 */

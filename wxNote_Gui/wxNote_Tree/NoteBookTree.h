@@ -81,6 +81,8 @@ protected:
     void _CreateActionsOnContextMenu();
     void _CreateContextMenu();
 
+    void _RestoreUsersNoteBook();
+
     /* 上下文菜单中的QAction */
     QAction* m_NewNoteBookAction;
     QAction* m_RenameAction;
