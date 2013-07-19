@@ -130,7 +130,8 @@
             QString _CurrentNoteBookName = m_NoteBookTree->currentItem()->text(0);
 
             QList<_NoteListItem *> _Notes =
-                    m_NoteList->_GetNotesInSpecifiedNoteBook(_CurrentNoteBookName);
+                    m_NoteList->_GetNotesInSpecifiedNoteBook(_CurrentNoteBookName,
+                                                             m_wxNoteTabWidget);
 
             for (int _Index = 0; _Index < _Notes.count(); _Index++)
                 {
@@ -181,7 +182,8 @@
         ::_GetFirstNoteInSpecifiedNoteBook(const QString &_NoteBookName)
         {
         _NoteListItem* _FirstNoteItem =
-                m_NoteList->_GetNotesInSpecifiedNoteBook(_NoteBookName).at(0);
+                m_NoteList->_GetNotesInSpecifiedNoteBook(_NoteBookName,
+                                                         m_wxNoteTabWidget).at(0);
 
         return _FirstNoteItem ? _FirstNoteItem : nullptr;
         }
@@ -660,7 +662,8 @@
             {
             QString _CurrentNoteBookName = m_NoteBookTree->currentItem()->text(0);
 
-            _Notes = m_NoteList->_GetNotesInSpecifiedNoteBook(_CurrentNoteBookName);
+            _Notes = m_NoteList->_GetNotesInSpecifiedNoteBook(_CurrentNoteBookName,
+                                                              m_wxNoteTabWidget);
             }
         else if (_CurrentTabText == wxNote::g_CategoriesListName)
             {
@@ -862,18 +865,38 @@
     /* _SetDeleteNoteEnabled()函数实现 */
     void _MainWindowNormal::_SetDeleteNoteEnabled()
         {
+        int _wxNoteTabWidgetIndex = m_wxNoteTabWidget->currentIndex();
+
+        QString _CurrentTabText =
+                m_wxNoteTabWidget->tabText(_wxNoteTabWidgetIndex);
+        QString _CurrentLabelText =
+                m_CategoriesTree->currentItem()->text(0);
+
+        bool _IsCurrentCategoriesIsEmpty =
+                m_NoteList->_GetNotesInSpecifiedNoteBook(
+                        _CurrentLabelText, m_wxNoteTabWidget).isEmpty();
+
         /* 只有在不在废纸篓下, 并且当前笔记本不为空的时候才能解禁"删除按钮和动作" */
         _SetDeleteNoteButton_Action_MenuEnabled(
                     m_NoteBookTree->currentItem()->text(0) != wxNote::g_TrashName
+                        && ((_CurrentTabText == wxNote::g_CategoriesListName)
+                                                ? !_IsCurrentCategoriesIsEmpty
+                                                : true)
                         && _SpecifyNoteBookCnt(m_NoteBookTree->currentItem()->text(0)));
         }
 
     /* _SetDeleteNoteBookEnabled()函数实现 */
     void _MainWindowNormal::_SetDeleteNoteBookEnabled()
         {
+        int _wxNoteTabWidgetIndex = m_wxNoteTabWidget->currentIndex();
+
+        QString _CurrentTabText =
+                m_wxNoteTabWidget->tabText(_wxNoteTabWidgetIndex);
+
         /* 只有在拥有可删除笔记本时, 才会解禁 */
         _SetDeleteNoteBookAction_MenuEnabled(
                     !wxNote::g_UserNoteBookNameList.isEmpty()
+                        && _CurrentTabText == wxNote::g_NoteBooksListName
                         && m_NoteBookTree->currentItem()->text(0) != wxNote::g_NoteBooksName
                         && m_NoteBookTree->currentItem()->text(0) != wxNote::g_AllNotesName
                         && m_NoteBookTree->currentItem()->text(0) != wxNote::g_TrashName
@@ -941,6 +964,8 @@
     void _MainWindowNormal::_wxNote_TabWidgetChangedSlot(int _TabIndex)
         {
         _SetNewNoteEnabled();
+        _SetDeleteNoteEnabled();
+        _SetDeleteNoteBookEnabled();
 
         QString _CurrentTabText = m_wxNoteTabWidget->tabText(_TabIndex);
 
@@ -969,7 +994,8 @@
             /// 并隐藏其他笔记本中的笔记.
             ///
             QList<_NoteListItem *> _Notes =
-                        m_NoteList->_GetNotesInSpecifiedNoteBook(_CurrentItemText);
+                        m_NoteList->_GetNotesInSpecifiedNoteBook(_CurrentItemText,
+                                                                 m_wxNoteTabWidget);
 
             _SetNotesAllHidden();
 
@@ -1158,6 +1184,8 @@
     void _MainWindowNormal::_CurrentCategoriesItemChangedSlot(QTreeWidgetItem */*_Current*/,
                                                               QTreeWidgetItem */*_Previous*/)
         {
+        _SetDeleteNoteEnabled();
+
         QString _CurrentLabelName = m_CategoriesTree->currentItem()->text(0);
 
         _FilterNote_inCategoriesTree(_CurrentLabelName);
@@ -1400,7 +1428,7 @@
         /* 存储该新建笔记所属的笔记本的名称 */
         QString _CurrentNoteBookName = m_NoteBookTree->currentItem()->text(0);
 
-        if (m_NoteList->_GetNotesInSpecifiedNoteBook(_CurrentNoteBookName).count() % 2)
+        if (m_NoteList->_GetNotesInSpecifiedNoteBook(_CurrentNoteBookName, m_wxNoteTabWidget).count() % 2)
             _Item->setBackground(QBrush(QColor(240, 240, 240), Qt::Dense3Pattern));
 
         /* 将该新建笔记与其所属的笔记本的名称绑定到一起 */
@@ -1911,7 +1939,8 @@
                     m_NoteBookTree->currentItem()->text(0);
 
             QList<_NoteListItem *> _NoteInCurrentNoteBook =
-                            m_NoteList->_GetNotesInSpecifiedNoteBook(_CurrentNoteBookName);
+                            m_NoteList->_GetNotesInSpecifiedNoteBook(_CurrentNoteBookName,
+                                                                     m_wxNoteTabWidget);
 
             QLineEdit* _SearchLineEdit = m_SearchPanel->_GetSearchLineEdit();
 
@@ -2476,7 +2505,14 @@
         else if (_CurrentLabelName == wxNote::g_LaterName)
             _FilterNote_ByCategories(wxNote::_Later);
 
-        _RestoreLastPitchOnItem_CategoriesTree(_CurrentLabelName);
+        bool _IsEmpty =
+                m_NoteList->_GetNotesInSpecifiedNoteBook(_CurrentLabelName,
+                                                         m_wxNoteTabWidget)
+                                                        .isEmpty();
+        if (_IsEmpty /* 如果当前标签中没有笔记.. */)
+            _SetNotesAllHidden();
+        else    /* 否则还原该标签中最后一次被选中的笔记项... */
+            _RestoreLastPitchOnItem_CategoriesTree(_CurrentLabelName);
         }
 
     /* _PitchOnSpecifiedNoteBook()函数实现 */
@@ -2504,7 +2540,8 @@
         ::_CheckSpecifiedNoteBookHasSelectItem(const QString _NoteBookName)
         {
         QList<_NoteListItem *> _Notes =
-                m_NoteList->_GetNotesInSpecifiedNoteBook(_NoteBookName);
+                m_NoteList->_GetNotesInSpecifiedNoteBook(_NoteBookName,
+                                                         m_wxNoteTabWidget);
 
         QList<bool> _AllPredicates;
         for (const _NoteListItem* _Elem : _Notes)

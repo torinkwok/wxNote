@@ -118,24 +118,68 @@
     /* _GetNotesInSpecifiedNoteBook()函数实现
      * 获取给定笔记本中的笔记的列表 */
     QList<_NoteListItem *> _NoteList
-        ::_GetNotesInSpecifiedNoteBook(const QString &_NoteBookName)
+        ::_GetNotesInSpecifiedNoteBook(const QString &_CurrentLabelName,
+                                       const QTabWidget *wxNote_TabWidget)
         {
         QList<_NoteListItem *> _Notes;
 
-        /* 如果当前笔记本是"全部笔记"或"笔记本"
-         * 那么将返回全部未在废纸篓中的笔记项 */
-        if (_NoteBookName == wxNote::g_AllNotesName
-                || _NoteBookName == wxNote::g_NoteBooksName)
-            _Notes = _GetAllNotes_ExceptTrash();
-        else
-            {
-            for (int _Index = 0; _Index < count(); _Index++)
-                {
-                _NoteListItem* _CurrentNoteItem = _Item(_Index);
+        int _wxNoteTabWidgetIndex = wxNote_TabWidget->currentIndex();
 
-                if (_NoteBookName == _CurrentNoteItem->_GetParentNoteBookName())
-                    _Notes.push_back(_CurrentNoteItem);
+        QString _CurrentTabText =
+                wxNote_TabWidget->tabText(_wxNoteTabWidgetIndex);
+
+        if (_CurrentTabText == wxNote::g_NoteBooksListName)
+            {
+            /* 如果当前笔记本是"全部笔记"或"笔记本"
+             * 那么将返回全部未在废纸篓中的笔记项 */
+            if (_CurrentLabelName == wxNote::g_AllNotesName
+                    || _CurrentLabelName == wxNote::g_NoteBooksName)
+                _Notes = _GetAllNotes_ExceptTrash();
+            else
+                {
+                for (int _Index = 0; _Index < count(); _Index++)
+                    {
+                    _NoteListItem* _CurrentNoteItem = _Item(_Index);
+
+                    if (_CurrentLabelName == _CurrentNoteItem->_GetParentNoteBookName())
+                        _Notes.push_back(_CurrentNoteItem);
+                    }
                 }
+            }
+
+        else if (_CurrentTabText == wxNote::g_CategoriesListName)
+            {
+            /* "评分" */
+            if (_CurrentLabelName == wxNote::g_ExcellentName)
+                _Notes = _GetNotesInSpecifiedRating(wxNote::_Excellent);
+
+            else if (_CurrentLabelName == wxNote::g_GoodName)
+                _Notes = _GetNotesInSpecifiedRating(wxNote::_Good);
+
+            else if (_CurrentLabelName == wxNote::g_AverageName)
+                _Notes = _GetNotesInSpecifiedRating(wxNote::_Average);
+
+            else if (_CurrentLabelName == wxNote::g_FairName)
+                _Notes = _GetNotesInSpecifiedRating(wxNote::_Fair);
+
+            else if (_CurrentLabelName == wxNote::g_PoorName)
+                _Notes = _GetNotesInSpecifiedRating(wxNote::_Poor);
+
+            /* "颜色标签" */
+            else if (_CurrentLabelName == wxNote::g_ImportantName)
+                _Notes = _GetNotesInSpecifiedCategories(wxNote::_Important);
+
+            else if (_CurrentLabelName == wxNote::g_WorkName)
+                _Notes = _GetNotesInSpecifiedCategories(wxNote::_Work);
+
+            else if (_CurrentLabelName == wxNote::g_PersonalName)
+                _Notes = _GetNotesInSpecifiedCategories(wxNote::_Personal);
+
+            else if (_CurrentLabelName == wxNote::g_ToDoName)
+                _Notes = _GetNotesInSpecifiedCategories(wxNote::_ToDo);
+
+            else if (_CurrentLabelName == wxNote::g_LaterName)
+                _Notes = _GetNotesInSpecifiedCategories(wxNote::_Later);
             }
 
         return _Notes;
@@ -222,7 +266,8 @@
                     || _CurrentNoteBookName == wxNote::g_NoteBooksName)
                 _Notes = _GetAllNotes_ExceptTrash();
             else
-                _Notes = _GetNotesInSpecifiedNoteBook(_CurrentNoteBookName);
+                _Notes = _GetNotesInSpecifiedNoteBook(_CurrentNoteBookName,
+                                                      wxNote_TabWidget);
             }
 
         else if (_CurrentTabText == wxNote::g_CategoriesListName)

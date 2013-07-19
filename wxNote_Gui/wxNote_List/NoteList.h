@@ -63,7 +63,8 @@ public:
     QString _GetCurrentItemTitle();
 
     QList<_NoteListItem *>
-        _GetNotesInSpecifiedNoteBook(const QString& _NoteBookName);
+        _GetNotesInSpecifiedNoteBook(const QString& _CurrentLabelName,
+                                     const QTabWidget* wxNote_TabWidget);
     QList<_NoteListItem *>
         _GetNotesInSpecifiedCategories(const wxNote::_NoteCategories);
     QList<_NoteListItem *>
