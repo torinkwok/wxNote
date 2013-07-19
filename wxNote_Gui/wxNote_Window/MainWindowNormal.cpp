@@ -1810,9 +1810,9 @@
 
         _CommonDialog _QuestionDialog(
                     this, tr("删除笔记本"),
-                    tr("<font color=darkred><B>你即将永远删除该笔记本。</font></B>"
+                    tr("<font color=darkred><B>确认删除笔记本“%1”？</font></B>"
                        "<p>如果你删除这个笔记本，该笔记本中的笔记不会被删除，而是会移动到默认笔记本中。"
-                       "<p>你确定要删除这个笔记本吗？"),
+                       "<p>你确定要删除这个笔记本吗？").arg(_DeletedNoteBookName),
                     tr("删除笔记本"), tr("离开"));
 
         if (_QuestionDialog.exec())
