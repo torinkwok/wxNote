@@ -118,15 +118,17 @@
         {
         if (m_SetPasswordLineEdit->text().isEmpty())
             {
-            QMessageBox::warning(this, tr("Warning"),
-                                 tr("密码不能为空！请重新输入。"),
-                                 QMessageBox::Ok);
+            QMessageBox::warning(this
+                                 , tr("Warning")
+                                 , tr("密码不能为空！请重新输入。")
+                                 , QMessageBox::Ok);
             return;
             } else if (m_ConfirmPasswordLineEdit->text().isEmpty())
                 {
-                QMessageBox::warning(this, tr("Warning"),
-                                     tr("请确认密码无误！"),
-                                     QMessageBox::Ok);
+                QMessageBox::warning(this
+                                     , tr("Warning")
+                                     , tr("请确认密码无误！")
+                                     , QMessageBox::Ok);
                 return;
                 }
 
@@ -142,9 +144,10 @@
             }
         else
             {
-            QMessageBox::warning(this, tr("Warning"),
-                                 tr("两次密码不一致，请核对后重新设置。"),
-                                 QMessageBox::Ok);
+            QMessageBox::warning(this
+                                 , tr("Warning")
+                                 , tr("两次密码不一致，请核对后重新设置。")
+                                 , QMessageBox::Ok);
             }
         }
 

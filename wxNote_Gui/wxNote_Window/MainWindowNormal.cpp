@@ -226,10 +226,11 @@
 
             if (_Option._GetIsChanged())
                 {
-                _CommonDialog _WarningDialog(this, tr("wxNote"),
-                                             tr("<font color=darkred><B>wxNote的默认设置已被更改。</font></B>"
-                                                "<p>有一些设置必须重启wxNote才能生效。"),
-                                             tr("好的"));
+                _CommonDialog _WarningDialog(this
+                                             , tr("wxNote")
+                                             , tr("<font color=darkred><B>wxNote的默认设置已被更改。</font></B>"
+                                                "<p>有一些设置必须重启wxNote才能生效。")
+                                             , tr("好的"));
                 _WarningDialog.exec();
                 }
             }
@@ -1607,11 +1608,12 @@
         if (_CurrentEditorWindow && _CurrentEditorWindow->_IsLocking())
             {
             _CommonDialog _MustUnlockDialog(
-                        this, tr("删除笔记"),
-                        tr("<font color=darkred><B>当前笔记已被锁定。</font></B>"
+                        this
+                        , tr("删除笔记")
+                        , tr("<font color=darkred><B>当前笔记已被锁定。</font></B>"
                            "<p>为了保护您的笔记安全，"
-                           "<p>必须对锁定笔记进行解锁后才能进行操作"),
-                        tr("好的"));
+                           "<p>必须对锁定笔记进行解锁后才能进行操作")
+                        , tr("好的"));
 
             _MustUnlockDialog.exec();
             return;
@@ -1700,22 +1702,25 @@
                     &&_CurrentEditorWindow->_IsLocking())
                 {
                 _CommonDialog _MustUnlockDialog(
-                            this, tr("删除笔记"),
-                            tr("<font color=darkred><B>当前笔记已被锁定。</font></B>"
+                            this
+                            , tr("删除笔记")
+                            , tr("<font color=darkred><B>当前笔记已被锁定。</font></B>"
                                "<p>为了保护您的笔记安全，"
-                               "<p>必须对锁定笔记进行解锁后才能进行操作"),
-                            tr("好的"));
+                               "<p>必须对锁定笔记进行解锁后才能进行操作")
+                            , tr("好的"));
 
                 _MustUnlockDialog.exec();
                 return;
                 }
 
             _CommonDialog _QuestionDialog(
-                        this, tr("删除笔记"),
-                        tr("<font color=darkred><B>你即将永远删除该笔记。</font></B>"
+                        this
+                        , tr("删除笔记")
+                        , tr("<font color=darkred><B>你即将永远删除该笔记。</font></B>"
                            "<p>如果你删除这条笔记，它将永远消失。"
-                           "<p>你确定要删除这条笔记吗？"),
-                        tr("删除笔记"), tr("离开"));
+                           "<p>你确定要删除这条笔记吗？")
+                        , tr("删除笔记")
+                        , tr("离开"));
 
             if (_QuestionDialog.exec())
                 {
@@ -1866,11 +1871,13 @@
         QString _DeletedNoteBookName = m_NoteBookTree->currentItem()->text(0);
 
         _CommonDialog _QuestionDialog(
-                    this, tr("删除笔记本"),
-                    tr("<font color=darkred><B>确认删除笔记本“%1”？</font></B>"
+                    this
+                    , tr("删除笔记本")
+                    , tr("<font color=darkred><B>确认删除笔记本“%1”？</font></B>"
                        "<p>如果你删除这个笔记本，该笔记本中的笔记不会被删除，而是会移动到默认笔记本中。"
-                       "<p>你确定要删除这个笔记本吗？").arg(_DeletedNoteBookName),
-                    tr("删除笔记本"), tr("离开"));
+                       "<p>你确定要删除这个笔记本吗？").arg(_DeletedNoteBookName)
+                    , tr("删除笔记本")
+                    , tr("离开"));
 
         if (_QuestionDialog.exec())
             {

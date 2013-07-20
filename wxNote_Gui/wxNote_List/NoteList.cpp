@@ -423,15 +423,16 @@
                     }
                 else
                     {
-                    _CommonDialog _WarningDialog(this, tr("wxNote"),
-                                                 tr("<font color=darkred><B>笔记“%1”已被删除。</font></B>"
+                    _CommonDialog _WarningDialog(this
+                                                 , tr("wxNote")
+                                                 , tr("<font color=darkred><B>笔记“%1”已被删除。</font></B>"
                                                     "<p>无法打开一个被删除的笔记的编辑窗口，"
                                                     "<p>必须还原笔记后才能进进行该操作。")
                                                     .arg(_CurrentNoteName.count() < _SoLongTitleStd
                                                                     ? _CurrentNoteName
                                                                     : _CurrentNoteName.left(4)
-                                                                      + "..." + _CurrentNoteName.right(4)),
-                                                 tr("OK"));
+                                                                      + "..." + _CurrentNoteName.right(4))
+                                                 , tr("OK"));
                     _WarningDialog.exec();
                     return;
                     }
