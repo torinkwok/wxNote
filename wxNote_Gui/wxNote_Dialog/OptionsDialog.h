@@ -34,6 +34,7 @@
 #pragma once
 #include <QDialog>
 
+class QLineEdit;
 class QTabWidget;
 class QLabel;
 class QGroupBox;
@@ -53,6 +54,9 @@ class _OptionsDialog : public QDialog
 public:
     _OptionsDialog(QWidget* _Parent = nullptr);
 
+    QLineEdit* _GetLocalFilePathLineEdit() const
+                    { return m_LocalFilePathLineEdit; }
+
     _FontComboBox* _GetFontComboBox() const
                     { return m_FontComboBox; }
     _FontSizeComboBox* _GetFontSizeComboBox() const
@@ -65,15 +69,28 @@ public:
 protected slots:
     void _SetCurrentSettingsChanged();
 
+    void _ChangeLocalFilePathSlot();
+
 protected:
     enum { _FontMinSize = 8, _FontMaxSize = 96 };
 
+    void _CreateCommonOptionPage();
     void _CreateNoteOptionsPage();
 
     QTabWidget*       m_TabWidgetOnDialog;
     QDialogButtonBox* m_ButtonBox;
 
     bool mb_IsChanged;
+
+    /* "通用"选项 */
+    QWidget* m_CommonOptionPage;
+
+    QGroupBox*   m_LocalFileGroupBox;
+    QLineEdit*   m_LocalFilePathLineEdit;
+    QPushButton* m_ChangePathPushButton;
+
+    QHBoxLayout* m_EditLocalFilePathLayout;
+    QVBoxLayout* m_LocalFileLayout;
 
     /* "笔记"选项 */
     QWidget* m_NoteOptionPage;

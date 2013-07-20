@@ -64,6 +64,8 @@ namespace wxNote
     {
     extern QSettings g_Settings;
 
+    extern QString g_LocalFilePath;
+
     typedef enum { _Normal, _Shadow } _ParentWindowType;
 
     typedef enum

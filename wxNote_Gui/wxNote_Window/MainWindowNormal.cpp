@@ -68,6 +68,7 @@
 #include <QContextMenuEvent>
 #include <QComboBox>
 #include <QClipboard>
+#include <QDir>
 #include <QLinearGradient>
 
 #include <algorithm>
@@ -80,6 +81,8 @@
           m_NoteStatus(_NormalStatus),
           m_MatchNoteItemDye(QColor(215, 168, 189), Qt::Dense1Pattern)
         {
+        _InitializeGlobalFilePath();
+
         _CreateActionsAndSubMenu();
         _CreateToolButtonOnToolBar();
         _CreateMainWinMenus();
@@ -212,9 +215,13 @@
                 }
 
             g_Settings.beginGroup("TextEditor");
+
+                g_Settings.setValue("LocalFilePath", _Option._GetLocalFilePathLineEdit()->text());
+
                 g_Settings.setValue("DefaultFont", _DefaultFontFamily);
                 g_Settings.setValue("DefaultFontSize", _DefaultFontSize);
                 g_Settings.setValue("AcceptRichText", _Option._GetAcceptRichTextCheckBox()->isChecked());
+
             g_Settings.endGroup();
 
             if (_Option._GetIsChanged())
@@ -398,6 +405,20 @@
 
     /////////////////////////////////////////////////////////////////////////
     //..protected部分
+
+    /* _InitializeGlobalFilePath()函数实现 */
+    void _MainWindowNormal::_InitializeGlobalFilePath()
+        {
+        wxNote::g_Settings.beginGroup("TextEditor");
+
+            QString _LocalFilePath =
+                    wxNote::g_Settings.value("LocalFilePath").toString();
+
+            wxNote::g_LocalFilePath = _LocalFilePath.isEmpty() ? QDir::homePath() + tr("/wxNote_USER")
+                                                               : _LocalFilePath;
+
+        wxNote::g_Settings.endGroup();
+        }
 
     /* _CreateActionsAndSubMenu()函数重写 */
     void _MainWindowNormal::_CreateActionsAndSubMenu()
@@ -1444,6 +1465,14 @@
         _EditWindow->_SetParentNoteBookName_Current(m_NoteBookTree->currentItem()->text(0));
         _EditWindow->_SetParentNoteBookName_BeforeDeleted(m_NoteBookTree->currentItem()->text(0));
 
+    #if 0   // TEST
+        QFile _InFile("D:/Test.html");
+        _InFile.open(QFile::ReadOnly);
+        QTextStream _Cin(&_InFile);
+        QString _Contains = _Cin.readAll();
+
+        _EditWindow->_GetTextEditor()->setHtml(_Contains);
+    #endif
         _Item->_SetBindTextEW(_EditWindow);
         _EditWindow->_SetBindNoteItem(_Item);
 
@@ -2555,6 +2584,13 @@
                                 });
         return b_HasSelect;
         }
+
+#if 0
+    void _MainWindowNormal::_SynchronousSlot()
+        {
+        cout << wxNote::g_LocalFilePath << endl;
+        }
+#endif
 
  ////////////////////////////////////////////////////////////////////////////
 

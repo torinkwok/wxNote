@@ -45,6 +45,8 @@ namespace wxNote
     {
     QSettings g_Settings("Tong G.", "wxNote");
 
+    QString g_LocalFilePath;
+
     QStringList g_UserNoteBookNameList;
 
     /* 用于存储新建的编辑窗口的指针 */

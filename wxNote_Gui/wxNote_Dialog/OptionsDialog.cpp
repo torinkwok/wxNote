@@ -43,6 +43,8 @@
 #include <QLayout>
 #include <QPushButton>
 #include <QCheckBox>
+#include <QLineEdit>
+#include <QFileDialog>
 #include <QDialogButtonBox>
 
 //.._OptionsDialog类实现
@@ -54,6 +56,7 @@
         {
         m_TabWidgetOnDialog = new QTabWidget;
 
+        _CreateCommonOptionPage();
         _CreateNoteOptionsPage();
 
         m_ButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok
@@ -77,7 +80,50 @@
     /////////////////////////////////////////////////////////////////////////
     //..protected部分
 
-    /* _CNoreateteOptionsPage()实现 */
+    /* _CreateCommonOptionPage()函数实现 */
+    void _OptionsDialog::_CreateCommonOptionPage()
+        {
+        using namespace wxNote;
+
+        g_Settings.beginGroup("TextEditor");
+
+            QString _LocalFilePath = g_Settings.value("LocalFilePath").toString();
+
+        g_Settings.endGroup();
+
+        m_LocalFilePathLineEdit = new QLineEdit;
+        m_LocalFilePathLineEdit->setReadOnly(true);
+        m_LocalFilePathLineEdit->setText(_LocalFilePath.isEmpty() ? QDir::homePath() + tr("/wxNote_USER")
+                                                                  : _LocalFilePath);
+
+        m_ChangePathPushButton = new QPushButton(tr("更改(&A)..."));
+        connect(m_ChangePathPushButton, SIGNAL(clicked()),
+                this, SLOT(_ChangeLocalFilePathSlot()));
+
+        m_EditLocalFilePathLayout = new QHBoxLayout;
+        m_EditLocalFilePathLayout->addWidget(m_LocalFilePathLineEdit);
+        m_EditLocalFilePathLayout->addWidget(m_ChangePathPushButton);
+
+        m_LocalFileLayout = new QVBoxLayout;
+        m_LocalFileLayout->addLayout(m_EditLocalFilePathLayout);
+        m_LocalFileLayout->addStretch();
+
+        m_LocalFileGroupBox = new QGroupBox(tr("wxNote 本地文件"));
+        m_LocalFileGroupBox->setLayout(m_LocalFileLayout);
+
+        QVBoxLayout* _MainLayout = new QVBoxLayout;
+        _MainLayout->addWidget(m_LocalFileGroupBox);
+
+        m_CommonOptionPage = new QWidget;
+        m_CommonOptionPage->setLayout(_MainLayout);
+
+        m_TabWidgetOnDialog->addTab(m_CommonOptionPage, tr("通用"));
+
+        connect(m_LocalFilePathLineEdit, SIGNAL(textChanged(QString)),
+                this, SLOT(_SetCurrentSettingsChanged()));
+        }
+
+    /* _CNoreateteOptionsPage()函数实现 */
     void _OptionsDialog::_CreateNoteOptionsPage()
         {
         using namespace wxNote;
@@ -158,6 +204,28 @@
         mb_IsChanged = true;
         }
 
+    /* _ChangeLocalFilePathSlot() */
+    void _OptionsDialog::_ChangeLocalFilePathSlot()
+        {
+        QStringList _DirSplit = wxNote::g_LocalFilePath.split('/');
+        _DirSplit.pop_back();
+
+        /* 取当前"本地文件夹"所在文件夹的path */
+        QString _Dir = (_DirSplit.count() > 1) ? _DirSplit.join('/')
+                                               : _DirSplit.at(0) + '/';
+
+        QString _NewPath =
+                QFileDialog::getExistingDirectory(this
+                                                  , tr("浏览文件夹")
+                                                  , _Dir);
+        if (!_NewPath.isEmpty())
+            {
+            m_LocalFilePathLineEdit->setText(_NewPath);
+
+            wxNote::g_LocalFilePath = _NewPath;
+            }
+        }
+
  ////////////////////////////////////////////////////////////////////////////
 
  /***************************************************************************
@@ -174,4 +242,3 @@
  **                                                                        **
  ***************************************************************************/
 ///:~
-

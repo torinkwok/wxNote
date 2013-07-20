@@ -187,6 +187,8 @@ protected slots:
     void _RecordLastPitchOnNoteItemSlot_Categories(int _Row);
 
 protected:
+    void _InitializeGlobalFilePath();
+
     void _CreateActionsAndSubMenu();
     void _CreateMainWinMenus();
     void _CreateMainWinToolBar();
@@ -308,6 +310,10 @@ protected:
     _wxNote_ToolButton* m_NewNoteToolButton;
     _wxNote_ToolButton* m_TrashToolButton;
     _wxNote_ToolButton* m_OneKeyLockToolButton;
+
+#if 0   // DEBUG
+    void _SynchronousSlot();
+#endif
     };
 
  ////////////////////////////////////////////////////////////////////////////
