@@ -38,6 +38,7 @@
 #include "wxNote_Global.h"
 
 #include <QTextEdit>
+#include <QDir>
 #include <QErrorMessage>
 #include <QListWidgetItem>
 
@@ -166,6 +167,44 @@ namespace wxNote
 
             exit(EXIT_FAILURE);
             }
+        }
+
+    /* _InitializeGlobalFilePath()函数实现 */
+    void _InitializeGlobalFilePath()
+        {
+        wxNote::g_Settings.beginGroup("TextEditor");
+
+            QString _LocalFilePath =
+                    wxNote::g_Settings.value("LocalFilePath").toString();
+
+            wxNote::g_LocalFilePath = _LocalFilePath.isEmpty() ? QDir::homePath() + "/wxNote_USER"
+                                                               : _LocalFilePath;
+            QDir _Dir(wxNote::g_LocalFilePath);
+
+            if (!_Dir.exists())
+                _Dir.mkpath(wxNote::g_LocalFilePath);
+
+        wxNote::g_Settings.endGroup();
+        }
+
+    /* _InitializeNoteBooks()函数实现 */
+    void _InitializeNoteBooks()
+        {
+        wxNote::g_Settings.beginGroup("MainWindow");
+
+            QStringList _UserNoteBookNames =
+                    wxNote::g_Settings.value("UserNoteBookNames").toStringList();
+
+            for (const QString& _Elem : _UserNoteBookNames)
+                {
+                QString _Path(wxNote::g_LocalFilePath + '/' + _Elem);
+                QDir _Dir(_Path);
+
+                if (!_Dir.exists())
+                    _Dir.mkpath(_Path);
+                }
+
+        wxNote::g_Settings.endGroup();
         }
 
     /* _GetEWFromGlobalList_BySpecifiedItem()函数实现

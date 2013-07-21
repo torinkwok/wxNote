@@ -69,6 +69,7 @@
 #include <QComboBox>
 #include <QClipboard>
 #include <QDir>
+#include <QTextCodec>
 #include <QLinearGradient>
 
 #include <algorithm>
@@ -81,7 +82,8 @@
           m_NoteStatus(_NormalStatus),
           m_MatchNoteItemDye(QColor(215, 168, 189), Qt::Dense1Pattern)
         {
-        _InitializeGlobalFilePath();
+        wxNote::_InitializeGlobalFilePath();
+        wxNote::_InitializeNoteBooks();
 
         _CreateActionsAndSubMenu();
         _CreateToolButtonOnToolBar();
@@ -406,20 +408,6 @@
 
     /////////////////////////////////////////////////////////////////////////
     //..protected部分
-
-    /* _InitializeGlobalFilePath()函数实现 */
-    void _MainWindowNormal::_InitializeGlobalFilePath()
-        {
-        wxNote::g_Settings.beginGroup("TextEditor");
-
-            QString _LocalFilePath =
-                    wxNote::g_Settings.value("LocalFilePath").toString();
-
-            wxNote::g_LocalFilePath = _LocalFilePath.isEmpty() ? QDir::homePath() + tr("/wxNote_USER")
-                                                               : _LocalFilePath;
-
-        wxNote::g_Settings.endGroup();
-        }
 
     /* _CreateActionsAndSubMenu()函数重写 */
     void _MainWindowNormal::_CreateActionsAndSubMenu()
@@ -1360,6 +1348,11 @@
             _NewNoteItem->setIcon(0, QIcon(":/wxNote_Icons/noteBook.png"));
             m_NoteBookTree->_GetNoteBookRoot()->addChild(_NewNoteItem);
 
+            QString _Path = wxNote::g_LocalFilePath + '/' + _NewNoteBookName;
+            QDir _Dir(_Path);
+            if (!_Dir.exists())
+                _Dir.mkpath(_Path);
+
             m_NoteBookTree->setCurrentItem(_NewNoteItem, 0);
 
             wxNote::g_UserNoteBookNameList.push_back(_NewNoteBookName);
@@ -1467,13 +1460,16 @@
         _EditWindow->_SetParentNoteBookName_BeforeDeleted(m_NoteBookTree->currentItem()->text(0));
 
     #if 0   // TEST
-        QFile _InFile("D:/Test.html");
+        QFile _InFile(wxNote::g_LocalFilePath + "/Test.html");
         _InFile.open(QFile::ReadOnly);
         QTextStream _Cin(&_InFile);
-        QString _Contains = _Cin.readAll();
+        _Cin.setCodec(QTextCodec::codecForLocale());
+
+        QString _Contains = _Cin.readAll()/*.replace("?", "&nbsp;")*/;
 
         _EditWindow->_GetTextEditor()->setHtml(_Contains);
     #endif
+
         _Item->_SetBindTextEW(_EditWindow);
         _EditWindow->_SetBindNoteItem(_Item);
 
@@ -1874,8 +1870,8 @@
                     this
                     , tr("删除笔记本")
                     , tr("<font color=darkred><B>确认删除笔记本“%1”？</font></B>"
-                       "<p>如果你删除这个笔记本，该笔记本中的笔记不会被删除，而是会移动到默认笔记本中。"
-                       "<p>你确定要删除这个笔记本吗？").arg(_DeletedNoteBookName)
+                         "<p>如果你删除这个笔记本，该笔记本中的笔记不会被删除，而是会移动到默认笔记本中。"
+                         "<p>你确定要删除这个笔记本吗？").arg(_DeletedNoteBookName)
                     , tr("删除笔记本")
                     , tr("离开"));
 
@@ -1944,6 +1940,11 @@
             //////////////////////////////////////////////////////////////////////
 
             _EraseLastPitchOnItem_inNoteBookList(_DeletedNoteBookName);
+
+            QString _Path = wxNote::g_LocalFilePath + '/' + _DeletedNoteBookName;
+            QDir _Dir(_Path);
+            if (_Dir.exists())
+                _Dir.rmpath(_Path);
 
             delete m_NoteBookTree->currentItem();
 
@@ -2591,7 +2592,6 @@
                                 });
         return b_HasSelect;
         }
-
 #if 0
     void _MainWindowNormal::_SynchronousSlot()
         {

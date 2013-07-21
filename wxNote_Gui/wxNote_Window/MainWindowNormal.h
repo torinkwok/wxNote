@@ -187,8 +187,6 @@ protected slots:
     void _RecordLastPitchOnNoteItemSlot_Categories(int _Row);
 
 protected:
-    void _InitializeGlobalFilePath();
-
     void _CreateActionsAndSubMenu();
     void _CreateMainWinMenus();
     void _CreateMainWinToolBar();

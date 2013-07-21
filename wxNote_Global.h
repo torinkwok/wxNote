@@ -147,6 +147,9 @@ namespace wxNote
     /* 用于检测程序中的致命空指针 */
     inline void _PointerChecker(const void* _SomePtr);
 
+    void _InitializeGlobalFilePath();
+    void _InitializeNoteBooks();
+
     /* 接受给定笔记项的指针以获取与之对应的编辑窗口的指针 */
     _TextEditorWindow* _GetEWFromGlobalList_BySpecifiedItem(
                             QListWidgetItem* _CurrentNoteItem);

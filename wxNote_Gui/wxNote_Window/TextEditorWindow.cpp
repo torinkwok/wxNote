@@ -62,6 +62,7 @@
 #include <QPushButton>
 #include <QLayout>
 #include <QStatusBar>
+#include <QTextCodec>
 #include <QActionGroup>
 
 //.._TextEditorWindow类实现
@@ -218,11 +219,20 @@
         _SetCurrentNoteMoveEnabled(!m_NoteTitleLineEdit->text().isEmpty());
         mb_IsChanged = false;   // 保存后, 将编辑器设置为未更改
 
-    #if 0   // DEBUG语句
-        QFile _OutFile("D:/Test.html");
+    #if 1   // DEBUG语句
+        wxNote::_InitializeNoteBooks();
+
+        QFile _OutFile(tr("%1/%2/%3.html").arg(wxNote::g_LocalFilePath)
+                                          .arg(_GetParentNoteBookName_Current())
+                                          .arg(m_NoteTitleLineEdit->text()));
         _OutFile.open(QFile::WriteOnly);
+
         QTextStream _Cout(&_OutFile);
-        _Cout << m_TextEditor->toHtml() << endl;
+        _Cout.setCodec(QTextCodec::codecForLocale());
+
+        QString _NoteContent = m_TextEditor->toHtml();
+
+        _Cout << _NoteContent << endl;
     #endif
         }
 
@@ -232,7 +242,9 @@
         using namespace wxNote;
 
         g_Settings.beginGroup("TextEditor");
+
             QString _Password = g_Settings.value("NotePassWord").toString();
+
         g_Settings.endGroup();
 
         if (_Password.isEmpty())
