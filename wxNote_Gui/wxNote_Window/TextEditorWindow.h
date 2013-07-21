@@ -203,6 +203,8 @@ signals:
 
     void _CurrentNoteBeMove2OtherNoteBookSignal(const QString& _NoteBookName);
 
+    void _DeleteNonMatchedNoteFileSignal(const QString& _CurrentNoteBook);
+
 protected slots:
     void _SetCurrentFontByFontComboBox(const QString& _FontFamily);
     void _SetCurrentFontSizeByFontSizeComboBox(const QString& _Text);

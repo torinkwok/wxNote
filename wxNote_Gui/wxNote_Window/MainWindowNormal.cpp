@@ -892,6 +892,7 @@
                         && ((_CurrentTabText == wxNote::g_CategoriesListName)
                                                 ? !_IsCurrentCategoriesIsEmpty
                                                 : true)
+                        && m_NoteBookTree->currentItem()->text(0) != wxNote::g_NoteBooksName
                         && _SpecifyNoteBookCnt(m_NoteBookTree->currentItem()->text(0)));
         }
 
@@ -941,6 +942,7 @@
         /* 只有不在废纸篓下才能解禁"新建笔记"按钮和动作 */
         _SetNewNoteButton_ActionEnabled(
                     _CurrentTabText == wxNote::g_NoteBooksListName
+                    && m_NoteBookTree->currentItem()->text(0) != wxNote::g_NoteBooksName
                     && m_NoteBookTree->currentItem()->text(0) != wxNote::g_TrashName
                     && m_NoteBookTree->currentItem()->text(0) != wxNote::g_LabelName
                     && m_NoteBookTree->currentItem()->text(0) != wxNote::g_PropertiesName);
@@ -1477,6 +1479,9 @@
             _EditWindow->_AddAction2_MoveNoteMenu(_Elem);
 
         wxNote::g_AllTextEditorList.push_back(_EditWindow);
+
+        connect(_EditWindow, SIGNAL(_DeleteNonMatchedNoteFileSignal(QString)),
+                this, SLOT(_DeleteNonMatchedNoteFile(QString)));
 
         connect(_EditWindow, SIGNAL(_EliminateNoteButtonClickedSignal()),
                 this, SLOT(_ThoroughDeleteCurrentNoteSlot()));
@@ -2161,6 +2166,60 @@
                 m_LastPitchOnItemList_CategoriesTree.push_back(
                             qMakePair(_CurrentCategoriesName, m_NoteList->_GetCurrentItem()));
             }
+        }
+
+
+    /* _DeleteNonMatchedNoteFile()函数实现 */
+    void _MainWindowNormal
+        ::_DeleteNonMatchedNoteFile(const QString &_CurrentNoteBook)
+        {
+        QString _CurrentPath = tr("%1/%2").arg(wxNote::g_LocalFilePath)
+                                          .arg((_CurrentNoteBook == wxNote::g_AllNotesName)
+                                                                    ? QString()
+                                                                    : _CurrentNoteBook);
+        QDir _CurrentDir(_CurrentPath);
+        QStringList _NoteFileNames = _CurrentDir.entryList();
+
+        QList<_NoteListItem *> _Notes =
+                m_NoteList->_GetNotesInSpecifiedNoteBook(_CurrentNoteBook,
+                                                         m_wxNoteTabWidget);
+    #if 0   // DEBUG
+        cout << "Before: " << endl;
+        for (const QString& _NameElem : _NoteFileNames)
+            cout << _NameElem << "  |  ";
+        cout << endl << endl;
+    #endif
+
+        auto _Iter =
+                std::remove_if(_NoteFileNames.begin() + 2, _NoteFileNames.end(),
+                               [&_Notes](const QString& _Elem)
+                                    {
+                                    for (const _NoteListItem* _NoteElem : _Notes)
+                                        if (_Elem.contains(".~_"))
+                                            if (_Elem.split(".~_").at(1)
+                                                    == _NoteElem->_GetNoteNameSlot())
+                                                return true;
+
+                                    return false;
+                                    });
+
+        if (_Iter != _NoteFileNames.end())
+            _NoteFileNames.erase(_Iter, _NoteFileNames.end());
+
+        std::for_each(_NoteFileNames.begin(), _NoteFileNames.end(),
+                      [this, &_CurrentPath](const QString& _Elem)
+                            {
+                            QFile _NoteFile(tr("%1/%2").arg(_CurrentPath)
+                                                       .arg(_Elem));
+                            _NoteFile.remove();
+                            });
+
+    #if 0   // DEBUG
+        cout << "After: " << endl;
+        for (const QString& _NameElem : _NoteFileNames)
+            cout << _NameElem << "  |  ";
+        cout << endl << endl;
+    #endif
         }
 
     /* _CurrentNoteChangedSlot_WindowTitle()槽实现 */

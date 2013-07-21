@@ -186,6 +186,8 @@ protected slots:
     void _RecordLastPitchOnNoteItemSlot_NoteBookTree(int _Row);
     void _RecordLastPitchOnNoteItemSlot_Categories(int _Row);
 
+    void _DeleteNonMatchedNoteFile(const QString& _CurrentNoteBook);
+
 protected:
     void _CreateActionsAndSubMenu();
     void _CreateMainWinMenus();

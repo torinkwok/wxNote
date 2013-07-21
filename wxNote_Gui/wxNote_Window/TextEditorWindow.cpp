@@ -63,6 +63,7 @@
 #include <QLayout>
 #include <QStatusBar>
 #include <QTextCodec>
+#include <QDir>
 #include <QActionGroup>
 
 //.._TextEditorWindow类实现
@@ -219,21 +220,30 @@
         _SetCurrentNoteMoveEnabled(!m_NoteTitleLineEdit->text().isEmpty());
         mb_IsChanged = false;   // 保存后, 将编辑器设置为未更改
 
-    #if 1   // DEBUG语句
         wxNote::_InitializeNoteBooks();
 
+        QString _CurrentNoteBookName = _GetParentNoteBookName_Current();
+        QString _CurrentNoteTitle = m_NoteTitleLineEdit->text();
+
+        QString _NoteName = tr("%1.~_%2.~_%3").arg(_CurrentNoteBookName)
+                                              .arg(_CurrentNoteTitle)
+                                              .arg(int(mb_IsLocking));
         QFile _OutFile(tr("%1/%2/%3.html").arg(wxNote::g_LocalFilePath)
-                                          .arg(_GetParentNoteBookName_Current())
-                                          .arg(m_NoteTitleLineEdit->text()));
-        _OutFile.open(QFile::WriteOnly);
+                                          .arg((_CurrentNoteBookName == wxNote::g_AllNotesName)
+                                                                        ? QString()
+                                                                        : _CurrentNoteBookName)
+                                          .arg(_NoteName));
+        if (_OutFile.open(QFile::WriteOnly))
+            {
+            QTextStream _Cout(&_OutFile);
+            _Cout.setCodec(QTextCodec::codecForLocale());
 
-        QTextStream _Cout(&_OutFile);
-        _Cout.setCodec(QTextCodec::codecForLocale());
+            QString _NoteContent = m_TextEditor->toHtml();
 
-        QString _NoteContent = m_TextEditor->toHtml();
+            _Cout << _NoteContent << endl;
+            }
 
-        _Cout << _NoteContent << endl;
-    #endif
+        emit _DeleteNonMatchedNoteFileSignal(_CurrentNoteBookName);
         }
 
     /* _LockCurrentNotesSlot()槽实现 */
