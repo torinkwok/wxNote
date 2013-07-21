@@ -39,6 +39,8 @@
 
 #include <QTextEdit>
 #include <QDir>
+#include <QFile>
+#include <QStringList>
 #include <QErrorMessage>
 #include <QListWidgetItem>
 
@@ -207,6 +209,50 @@ namespace wxNote
                 }
 
         wxNote::g_Settings.endGroup();
+        }
+
+    /* _Deleted_LoseHome_NoteFile()函数实现 */
+    void _Deleted_LoseHome_NoteFile(const QString &_CurrentPath,
+                                    QStringList &_NoteFileNames,
+                                    const QList<_NoteListItem *>& _Notes)
+        {
+        /* 将当前目录中"无家可归"的文件名保留下来... */
+        auto _Iter =
+            std::remove_if(_NoteFileNames.begin() + 2, _NoteFileNames.end(),
+                           [&_Notes](const QString& _Elem)
+                                {
+                                for (const _NoteListItem* _NoteElem : _Notes)
+                                    {
+                                    if (_Elem.contains(wxNote::g_NoteNameSplitSymbol))
+                                        {
+                                        QStringList _Splited = _Elem.split(wxNote::g_NoteNameSplitSymbol);
+
+                                        bool _IsCurrentNoteLocking = _NoteElem->_GetBindTextEW()->_IsLocking();
+                                        wxNote::_NoteCategories _CurrentNoteCategories = _NoteElem->_GetNoteCategories();
+                                        wxNote::_NoteRating _CurrentNoteRating = _NoteElem->_GetNoteRating();
+
+                                        if (_Splited.at(1) == _NoteElem->_GetNoteNameSlot()
+                                                && bool(_Splited.at(2).toInt()) == _IsCurrentNoteLocking
+                                                && wxNote::_NoteCategories(_Splited.at(3).toInt()) == _CurrentNoteCategories
+                                                && wxNote::_NoteRating(_Splited.at(4).toInt()) == _CurrentNoteRating)
+                                            return true;
+                                        }
+                                    }
+
+                                return false;
+                                });
+
+        if (_Iter != _NoteFileNames.end())
+            _NoteFileNames.erase(_Iter, _NoteFileNames.end());
+
+        /* 删除当前目录中"无家可归"的文件... */
+        std::for_each(_NoteFileNames.begin(), _NoteFileNames.end(),
+                      [&_CurrentPath](const QString& _Elem)
+                            {
+                            QFile _NoteFile(QObject::tr("%1/%2").arg(_CurrentPath)
+                                                                .arg(_Elem));
+                            _NoteFile.remove();
+                            });
         }
 
     /* _GetEWFromGlobalList_BySpecifiedItem()函数实现

@@ -2175,53 +2175,17 @@
         {
         QString _CurrentPath = tr("%1/%2").arg(wxNote::g_LocalFilePath)
                                           .arg((_CurrentNoteBook == wxNote::g_AllNotesName)
-                                                                    ? QString()
-                                                                    : _CurrentNoteBook);
+                                                                        ? QString()
+                                                                        : _CurrentNoteBook);
         QDir _CurrentDir(_CurrentPath);
         QStringList _NoteFileNames = _CurrentDir.entryList();
 
         QList<_NoteListItem *> _Notes =
                 m_NoteList->_GetNotesInSpecifiedNoteBook(_CurrentNoteBook,
                                                          m_wxNoteTabWidget);
-    #if 0   // DEBUG
-        cout << "Before: " << endl;
-        for (const QString& _NameElem : _NoteFileNames)
-            cout << _NameElem << "  |  ";
-        cout << endl << endl;
-    #endif
-
-        /* 将当前目录中"无家可归"的文件名保留下来... */
-        auto _Iter =
-                std::remove_if(_NoteFileNames.begin() + 2, _NoteFileNames.end(),
-                               [&_Notes](const QString& _Elem)
-                                    {
-                                    for (const _NoteListItem* _NoteElem : _Notes)
-                                        if (_Elem.contains(wxNote::g_NoteNameSplitSymbol))
-                                            if (_Elem.split(wxNote::g_NoteNameSplitSymbol).at(1)
-                                                    == _NoteElem->_GetNoteNameSlot())
-                                                return true;
-
-                                    return false;
-                                    });
-
-        if (_Iter != _NoteFileNames.end())
-            _NoteFileNames.erase(_Iter, _NoteFileNames.end());
-
-        /* 删除当前目录中"无家可归"的文件... */
-        std::for_each(_NoteFileNames.begin(), _NoteFileNames.end(),
-                      [this, &_CurrentPath](const QString& _Elem)
-                            {
-                            QFile _NoteFile(tr("%1/%2").arg(_CurrentPath)
-                                                       .arg(_Elem));
-                            _NoteFile.remove();
-                            });
-
-    #if 0   // DEBUG
-        cout << "After: " << endl;
-        for (const QString& _NameElem : _NoteFileNames)
-            cout << _NameElem << "  |  ";
-        cout << endl << endl;
-    #endif
+        wxNote::_Deleted_LoseHome_NoteFile(_CurrentPath
+                                           , _NoteFileNames
+                                           , _Notes);
         }
 
     /* _CurrentNoteChangedSlot_WindowTitle()槽实现 */

@@ -37,6 +37,7 @@
 #include <QList>
 
 class _TextEditorWindow;
+class _NoteListItem;
 
 class QListWidgetItem;
 class QTextEdit;
@@ -151,6 +152,10 @@ namespace wxNote
 
     void _InitializeGlobalFilePath();
     void _InitializeNoteBooks();
+
+    void _Deleted_LoseHome_NoteFile(const QString& _CurrentPath,
+                                    QStringList& _NoteFileNames,
+                                    const QList<_NoteListItem *>& _Notes);
 
     /* 接受给定笔记项的指针以获取与之对应的编辑窗口的指针 */
     _TextEditorWindow* _GetEWFromGlobalList_BySpecifiedItem(

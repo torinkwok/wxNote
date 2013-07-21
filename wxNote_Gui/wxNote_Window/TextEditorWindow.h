@@ -268,6 +268,8 @@ protected:
     void _SetJustifyRightButtonChecked();
     void _SetJustifyFillButtonChecked();
 
+    void _SaveCurrentNote2File();
+
     QString    m_ParentNoteBookName_Current;
     QString    m_ParentNoteBookName_BeforeDeleted;
     QString    m_Categories_Current;

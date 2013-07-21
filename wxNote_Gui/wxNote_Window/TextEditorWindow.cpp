@@ -41,6 +41,7 @@
 #include "wxNote_Gui/wxNote_Button/EliminateOrRestorePushButton.h"
 #include "wxNote_Gui/wxNote_Other/FontComboBox.h"
 #include "wxNote_Gui/wxNote_Other/FontSizeComboBox.h"
+
 #include "wxNote_Item/NoteListItem.h"
 
 #include <QApplication>
@@ -84,9 +85,11 @@
         /// 读取用户设置的默认字体和默认字体大小
         ///
         g_Settings.beginGroup("TextEditor");
+
             m_DefaultFontFamily = g_Settings.value("DefaultFont", QString("微软雅黑")).toString();
             m_DefaultFontSize = g_Settings.value("DefaultFontSize", 8).toInt();
             mb_IsAcceptRichText = g_Settings.value("AcceptRichText").toBool();
+
         g_Settings.endGroup();
 
         /////////////////////////////////////////////////////////////////////
@@ -220,30 +223,7 @@
         _SetCurrentNoteMoveEnabled(!m_NoteTitleLineEdit->text().isEmpty());
         mb_IsChanged = false;   // 保存后, 将编辑器设置为未更改
 
-        wxNote::_InitializeNoteBooks();
-
-        QString _CurrentNoteBookName = _GetParentNoteBookName_Current();
-        QString _CurrentNoteTitle = m_NoteTitleLineEdit->text();
-
-        QString _NoteName = tr("%1.~_%2.~_%3").arg(_CurrentNoteBookName)
-                                              .arg(_CurrentNoteTitle)
-                                              .arg(int(mb_IsLocking));
-        QFile _OutFile(tr("%1/%2/%3.html").arg(wxNote::g_LocalFilePath)
-                                          .arg((_CurrentNoteBookName == wxNote::g_AllNotesName)
-                                                                        ? QString()
-                                                                        : _CurrentNoteBookName)
-                                          .arg(_NoteName));
-        if (_OutFile.open(QFile::WriteOnly))
-            {
-            QTextStream _Cout(&_OutFile);
-            _Cout.setCodec(QTextCodec::codecForLocale());
-
-            QString _NoteContent = m_TextEditor->toHtml();
-
-            _Cout << _NoteContent << endl;
-            }
-
-        emit _DeleteNonMatchedNoteFileSignal(_CurrentNoteBookName);
+        _SaveCurrentNote2File();
         }
 
     /* _LockCurrentNotesSlot()槽实现 */
@@ -264,6 +244,8 @@
                 {
                 _SetEditorNotEnabled();
                 _EmitPreviewText(m_NoteTitleLineEdit->text());
+
+                _SaveCurrentNote2File();
                 return true;
                 }
             else
@@ -273,6 +255,8 @@
             {
             _SetEditorNotEnabled();
             _EmitPreviewText(m_NoteTitleLineEdit->text());
+
+            _SaveCurrentNote2File();
             return true;
             }
         }
@@ -286,6 +270,8 @@
             {
             _SetEditorIsEnabled();
             _EmitPreviewText(m_NoteTitleLineEdit->text());
+
+            _SaveCurrentNote2File();
             }
         }
 
@@ -955,6 +941,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Rating_Current = QString();
+
+            _SaveCurrentNote2File();
             }
         }
 
@@ -969,6 +957,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Rating_Current = wxNote::g_ExcellentName;
+
+            _SaveCurrentNote2File();
             }
         }
 
@@ -983,6 +973,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Rating_Current = wxNote::g_GoodName;
+
+            _SaveCurrentNote2File();
             }
         }
 
@@ -997,6 +989,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Rating_Current = wxNote::g_AverageName;
+
+            _SaveCurrentNote2File();
             }
         }
 
@@ -1011,6 +1005,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Rating_Current = wxNote::g_FairName;
+
+            _SaveCurrentNote2File();
             }
         }
 
@@ -1025,6 +1021,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Rating_Current = wxNote::g_PoorName;
+
+            _SaveCurrentNote2File();
             }
         }
 
@@ -1039,6 +1037,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Categories_Current = QString();
+
+            _SaveCurrentNote2File();
             }
         }
 
@@ -1053,6 +1053,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Categories_Current = wxNote::g_ImportantName;
+
+            _SaveCurrentNote2File();
             }
         }
 
@@ -1067,6 +1069,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Categories_Current = wxNote::g_WorkName;
+
+            _SaveCurrentNote2File();
             }
         }
 
@@ -1081,6 +1085,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Categories_Current = wxNote::g_PersonalName;
+
+            _SaveCurrentNote2File();
             }
         }
 
@@ -1095,6 +1101,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Categories_Current = wxNote::g_ToDoName;
+
+            _SaveCurrentNote2File();
             }
         }
 
@@ -1109,6 +1117,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Categories_Current = wxNote::g_LaterName;
+
+            _SaveCurrentNote2File();
             }
         }
 
@@ -1327,6 +1337,38 @@
     void _TextEditorWindow::_SetJustifyFillButtonChecked()
         {
         m_JustifyFillToolButton->setChecked(true);
+        }
+
+    /* _SaveCurrentNote2File()函数实现 */
+    void _TextEditorWindow::_SaveCurrentNote2File()
+        {
+        wxNote::_InitializeNoteBooks();
+
+        QString _CurrentNoteBookName = _GetParentNoteBookName_Current();
+        QString _CurrentNoteTitle = m_NoteTitleLineEdit->text();
+
+        QString _NoteName = tr("%1.~_%2.~_%3.~_%4.~_%5").arg(_CurrentNoteBookName)
+                                                        .arg(_CurrentNoteTitle)
+                                                        .arg(int(mb_IsLocking))
+                                                        .arg(int(enum_NoteCategories))
+                                                        .arg(int(enum_NoteRating));
+
+        QFile _OutFile(tr("%1/%2/%3.html").arg(wxNote::g_LocalFilePath)
+                                          .arg((_CurrentNoteBookName == wxNote::g_AllNotesName)
+                                                                        ? QString()
+                                                                        : _CurrentNoteBookName)
+                                          .arg(_NoteName));
+        if (_OutFile.open(QFile::WriteOnly))
+            {
+            QTextStream _Cout(&_OutFile);
+            _Cout.setCodec(QTextCodec::codecForLocale());
+
+            QString _NoteContent = m_TextEditor->toHtml();
+
+            _Cout << _NoteContent << endl;
+            }
+
+        emit _DeleteNonMatchedNoteFileSignal(_CurrentNoteBookName);
         }
 
  ////////////////////////////////////////////////////////////////////////////
