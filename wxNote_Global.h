@@ -142,6 +142,8 @@ namespace wxNote
 
     extern QString g_CheckBoxHTML;
 
+    extern QString g_NoteNameSplitSymbol;
+
     extern QFont g_StandardFont;
 
     /* 用于检测程序中的致命空指针 */

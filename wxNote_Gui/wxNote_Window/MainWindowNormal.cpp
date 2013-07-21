@@ -2190,13 +2190,14 @@
         cout << endl << endl;
     #endif
 
+        /* 将当前目录中"无家可归"的文件名保留下来... */
         auto _Iter =
                 std::remove_if(_NoteFileNames.begin() + 2, _NoteFileNames.end(),
                                [&_Notes](const QString& _Elem)
                                     {
                                     for (const _NoteListItem* _NoteElem : _Notes)
-                                        if (_Elem.contains(".~_"))
-                                            if (_Elem.split(".~_").at(1)
+                                        if (_Elem.contains(wxNote::g_NoteNameSplitSymbol))
+                                            if (_Elem.split(wxNote::g_NoteNameSplitSymbol).at(1)
                                                     == _NoteElem->_GetNoteNameSlot())
                                                 return true;
 
@@ -2206,6 +2207,7 @@
         if (_Iter != _NoteFileNames.end())
             _NoteFileNames.erase(_Iter, _NoteFileNames.end());
 
+        /* 删除当前目录中"无家可归"的文件... */
         std::for_each(_NoteFileNames.begin(), _NoteFileNames.end(),
                       [this, &_CurrentPath](const QString& _Elem)
                             {

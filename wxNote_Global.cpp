@@ -146,6 +146,8 @@ namespace wxNote
 
     QString g_CheckBoxHTML("<img src=\"file:///C:/Users/ADMINI~1/AppData/Local/Temp/enhtmlclip/entodo_unchecked.png\" />");
 
+    QString g_NoteNameSplitSymbol(".~_");
+
     QFont g_StandardFont("微软雅黑", 9, 9);
 
     /* _PointerChecker()函数实现
