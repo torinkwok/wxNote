@@ -156,6 +156,8 @@ namespace wxNote
     void _Deleted_LoseHome_NoteFile(const QString& _CurrentPath,
                                     const QList<_NoteListItem *>& _Notes);
 
+    QString _GetMatchedNoteFile_byNoteItem(const _NoteListItem* _NoteItem);
+
     /* 接受给定笔记项的指针以获取与之对应的编辑窗口的指针 */
     _TextEditorWindow* _GetEWFromGlobalList_BySpecifiedItem(
                             QListWidgetItem* _CurrentNoteItem);

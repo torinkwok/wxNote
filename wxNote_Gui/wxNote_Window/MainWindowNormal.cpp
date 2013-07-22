@@ -977,6 +977,15 @@
                                                    const QString &_FileName,
                                                    const QString &_2NoteBook)
         {
+        if (_2NoteBook == wxNote::g_TrashName)
+            {
+            QString _TrashPath = _GetSpecifiedNoteBookPath(wxNote::g_TrashName);
+
+            QDir _TrashDir(_TrashPath);
+            if (!_TrashDir.exists())
+                _TrashDir.mkpath(_TrashPath);
+            }
+
         QString _OldPath = tr("%1/%2").arg(_GetSpecifiedNoteBookPath(_FromNoteBook))
                                       .arg(_FileName);
 
@@ -1644,6 +1653,11 @@
 
         if (_CurrentNoteItem)
             {
+            /* 首先将该笔记移到trash文件夹中 */
+            _MoveNoteFile2OtherOne(_CurrentNoteBookName
+                                   , wxNote::_GetMatchedNoteFile_byNoteItem(_CurrentNoteItem)
+                                   , wxNote::g_TrashName);
+
             emit _CloseCurrentNoteShadowWindowSignal(_CurrentEditorWindow);
 
             _EraseLastPitchOnItem_inNoteBookList(_CurrentNoteBookName);
@@ -2658,7 +2672,8 @@
 #if 0
     void _MainWindowNormal::_SynchronousSlot()
         {
-        QFile::copy("D:/lineEdit1.png", "C:/Copy.png");
+        cout << wxNote::_GetMatchedNoteFile_byNoteItem(m_NoteList->_GetCurrentItem())
+             << endl;
         }
 #endif
 

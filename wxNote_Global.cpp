@@ -265,6 +265,46 @@ namespace wxNote
                             });
         }
 
+    /* _GetMatchedNoteFile_byNoteItem()函数实现 */
+    QString _GetMatchedNoteFile_byNoteItem(const _NoteListItem *_NoteItem)
+        {
+        QString _NoteBookName = _NoteItem->_GetParentNoteBookName();
+        QString _NotePath = QObject::tr("%1%2").arg(wxNote::g_LocalFilePath)
+                                               .arg((_NoteBookName == wxNote::g_AllNotesName)
+                                                                        ? QString()
+                                                                        : '/' + _NoteBookName);
+        QDir _Dir(_NotePath);
+        QStringList _NoteFileNames = _Dir.entryList();
+
+        bool _IsCurrentNoteLocking = _NoteItem->_GetBindTextEW()->_IsLocking();
+
+        wxNote::_NoteCategories _CurrentNoteCategories =
+                    _NoteItem->_GetBindTextEW()->_GetNoteCategories();
+        wxNote::_NoteRating _CurrentNoteRating =
+                    _NoteItem->_GetBindTextEW()->_GetNoteRating();
+
+        QString _CreateDate_Str = _NoteItem->_GetCreateDate().toString(Qt::ISODate);
+        QString _CreateTime_Str = _NoteItem->_GetCreateTime().toString("hh-mm-ss");
+
+        for (const QString& _Elem : _NoteFileNames)
+            {
+            if (_Elem.contains(wxNote::g_NoteNameSplitSymbol))
+                {
+                QStringList _Splited = _Elem.split(wxNote::g_NoteNameSplitSymbol);
+
+                if (_Splited.at(1) == _NoteItem->_GetNoteNameSlot()
+                        && bool(_Splited.at(2).toInt()) == _IsCurrentNoteLocking
+                        && wxNote::_NoteCategories(_Splited.at(3).toInt()) == _CurrentNoteCategories
+                        && wxNote::_NoteRating(_Splited.at(4).toInt()) == _CurrentNoteRating
+                        && _Splited.at(5) == _CreateDate_Str
+                        && _Splited.at(6) == _CreateTime_Str)
+                    return _Elem;
+                }
+            }
+
+        return QString();
+        }
+
     /* _GetEWFromGlobalList_BySpecifiedItem()函数实现
      * 接受给定笔记项的指针以获取与之对应的编辑窗口的指针 */
     _TextEditorWindow*
