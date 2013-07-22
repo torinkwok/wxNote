@@ -38,6 +38,8 @@
 #include <QFont>
 #include <QMenu>
 #include <QStringList>
+#include <QDate>
+#include <QTime>
 
 #ifndef QT_KEYPAD_NAVIGATION
     #define QT_KEYPAD_NAVIGATION
@@ -85,6 +87,17 @@ public:
     /* 设置该笔记的编辑窗口当前所属的笔记本名称 */
     void _SetParentNoteBookName_Current(const QString& _NoteBookName)
                     { m_ParentNoteBookName_Current = _NoteBookName; }
+
+    void _SetCreateDate(const QDate& _Date)
+                    { m_CreateDate = _Date; }
+    QDate _GetCreateDate() const
+                    { return m_CreateDate; }
+
+    void _SetCreateTime(const QTime& _Time)
+                    { m_CreateTime = _Time; }
+    QTime _GetCreateTime() const
+                    { return m_CreateTime; }
+
     /* Getter */
     QString _GetParentNoteBookName_Current() const
                     { return m_ParentNoteBookName_Current; }
@@ -269,6 +282,9 @@ protected:
     void _SetJustifyFillButtonChecked();
 
     void _SaveCurrentNote2File();
+
+    QDate      m_CreateDate;
+    QTime      m_CreateTime;
 
     QString    m_ParentNoteBookName_Current;
     QString    m_ParentNoteBookName_BeforeDeleted;

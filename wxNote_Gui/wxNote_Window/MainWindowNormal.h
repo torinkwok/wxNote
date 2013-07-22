@@ -257,6 +257,8 @@ protected:
 
     bool _CheckSpecifiedNoteBookHasSelectItem(const QString _NoteBookName);
 
+    QString _GetSpecifiedNoteBookPath(const QString& _NoteBookName);
+
     enum enum_NoteStatus { _NormalStatus, _FilterStatus } m_NoteStatus;
 
     QBrush  m_MatchNoteItemDye;

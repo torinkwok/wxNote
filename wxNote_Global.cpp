@@ -213,9 +213,11 @@ namespace wxNote
 
     /* _Deleted_LoseHome_NoteFile()函数实现 */
     void _Deleted_LoseHome_NoteFile(const QString &_CurrentPath,
-                                    QStringList &_NoteFileNames,
-                                    const QList<_NoteListItem *>& _Notes)
+                                    const QList<_NoteListItem *> &_Notes)
         {
+        QDir _CurrentDir(_CurrentPath);
+        QStringList _NoteFileNames = _CurrentDir.entryList();
+
         /* 将当前目录中"无家可归"的文件名保留下来... */
         auto _Iter =
             std::remove_if(_NoteFileNames.begin() + 2, _NoteFileNames.end(),
@@ -244,6 +246,10 @@ namespace wxNote
 
         if (_Iter != _NoteFileNames.end())
             _NoteFileNames.erase(_Iter, _NoteFileNames.end());
+
+        for (const QString& _Elem : _NoteFileNames)
+            cout << _Elem << "  |  ";
+        cout << endl << endl;
 
         /* 删除当前目录中"无家可归"的文件... */
         std::for_each(_NoteFileNames.begin(), _NoteFileNames.end(),

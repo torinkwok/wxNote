@@ -59,6 +59,16 @@ public:
     wxNote::_NoteCategories _GetNoteCategories() const
                 { return enum_NoteCategories; }
 
+    void _SetCreateDate(const QDate& _Date)
+                    { m_CreateDate = _Date; }
+    QDate _GetCreateDate() const
+                    { return m_CreateDate; }
+
+    void _SetCreateTime(const QTime& _Time)
+                    { m_CreateTime = _Time; }
+    QTime _GetCreateTime() const
+                    { return m_CreateTime; }
+
     /* 获取存储该笔记项的笔记本的名称 */
     QString _GetParentNoteBookName() const
                 { return m_ParentNoteBookName_Current; }
@@ -87,6 +97,9 @@ public slots:
     void _SetTitle(const QString& _NewTitle);
 
 protected:
+    QDate      m_CreateDate;
+    QTime      m_CreateTime;
+
     QString m_ParentNoteBookName_Current;       // 用于存储该笔记项当前所属的笔记本的名称
     QString m_ParentNoteBookName_BeforeDeleted; // 用于存储该笔记被删除前所属的笔记本的名称
 

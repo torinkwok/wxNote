@@ -1461,17 +1461,6 @@
         _EditWindow->_SetParentNoteBookName_Current(m_NoteBookTree->currentItem()->text(0));
         _EditWindow->_SetParentNoteBookName_BeforeDeleted(m_NoteBookTree->currentItem()->text(0));
 
-    #if 0   // TEST
-        QFile _InFile(wxNote::g_LocalFilePath + "/Test.html");
-        _InFile.open(QFile::ReadOnly);
-        QTextStream _Cin(&_InFile);
-        _Cin.setCodec(QTextCodec::codecForLocale());
-
-        QString _Contains = _Cin.readAll()/*.replace("?", "&nbsp;")*/;
-
-        _EditWindow->_GetTextEditor()->setHtml(_Contains);
-    #endif
-
         _Item->_SetBindTextEW(_EditWindow);
         _EditWindow->_SetBindNoteItem(_Item);
 
@@ -1479,6 +1468,16 @@
             _EditWindow->_AddAction2_MoveNoteMenu(_Elem);
 
         wxNote::g_AllTextEditorList.push_back(_EditWindow);
+
+        QDate _CreateDate = QDate::currentDate();
+        QTime _CreateTime = QTime::currentTime();
+        _Item->_SetCreateDate(_CreateDate);
+        _Item->_SetCreateTime(_CreateTime);
+        _EditWindow->_SetCreateDate(_CreateDate);
+        _EditWindow->_SetCreateTime(_CreateTime);
+
+//        cout << "Date: " << _CreateDate.toString(Qt::ISODate) << endl;
+//        cout << "Time: " << _CreateTime.toString("hh-mm-ss") << endl;
 
         connect(_EditWindow, SIGNAL(_DeleteNonMatchedNoteFileSignal(QString)),
                 this, SLOT(_DeleteNonMatchedNoteFile(QString)));
@@ -1756,6 +1755,8 @@
         _SetDeleteNoteEnabled();
         _SetOneKeyLockEnabled();
         _SetNoteEditEnabled();
+
+        _DeleteNonMatchedNoteFile(_CurrentNoteBookName);
         }
 
     /* _RestoreNoteSlot()槽实现 */
@@ -1946,10 +1947,10 @@
 
             _EraseLastPitchOnItem_inNoteBookList(_DeletedNoteBookName);
 
-            QString _Path = wxNote::g_LocalFilePath + '/' + _DeletedNoteBookName;
+            QString _Path = _GetSpecifiedNoteBookPath(_DeletedNoteBookName);
             QDir _Dir(_Path);
             if (_Dir.exists())
-                _Dir.rmpath(_Path);
+                _Dir.removeRecursively();
 
             delete m_NoteBookTree->currentItem();
 
@@ -2173,19 +2174,12 @@
     void _MainWindowNormal
         ::_DeleteNonMatchedNoteFile(const QString &_CurrentNoteBook)
         {
-        QString _CurrentPath = tr("%1/%2").arg(wxNote::g_LocalFilePath)
-                                          .arg((_CurrentNoteBook == wxNote::g_AllNotesName)
-                                                                        ? QString()
-                                                                        : _CurrentNoteBook);
-        QDir _CurrentDir(_CurrentPath);
-        QStringList _NoteFileNames = _CurrentDir.entryList();
+        QString _CurrentPath = _GetSpecifiedNoteBookPath(_CurrentNoteBook);
 
         QList<_NoteListItem *> _Notes =
                 m_NoteList->_GetNotesInSpecifiedNoteBook(_CurrentNoteBook,
                                                          m_wxNoteTabWidget);
-        wxNote::_Deleted_LoseHome_NoteFile(_CurrentPath
-                                           , _NoteFileNames
-                                           , _Notes);
+        wxNote::_Deleted_LoseHome_NoteFile(_CurrentPath, _Notes);
         }
 
     /* _CurrentNoteChangedSlot_WindowTitle()槽实现 */
@@ -2616,6 +2610,17 @@
                                 return _Elem;
                                 });
         return b_HasSelect;
+        }
+
+    /* _GetSpecifiedNoteBookPath()函数实现 */
+    QString _MainWindowNormal
+        ::_GetSpecifiedNoteBookPath(const QString &_NoteBookName)
+        {
+        QString _CurrentPath = tr("%1/%2").arg(wxNote::g_LocalFilePath)
+                                          .arg((_NoteBookName == wxNote::g_AllNotesName)
+                                                              ? QString()
+                                                              : _NoteBookName);
+        return _CurrentPath;
         }
 #if 0
     void _MainWindowNormal::_SynchronousSlot()
