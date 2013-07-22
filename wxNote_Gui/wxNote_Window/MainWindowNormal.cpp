@@ -972,6 +972,32 @@
                         && _SpecifyNoteBookCnt(m_NoteBookTree->currentItem()->text(0)));
         }
 
+    /* _MoveNoteFile2OtherOne()函数实现 */
+    bool _MainWindowNormal::_MoveNoteFile2OtherOne(const QString &_FromNoteBook,
+                                                   const QString &_FileName,
+                                                   const QString &_2NoteBook)
+        {
+        QString _OldPath = tr("%1/%2").arg(_GetSpecifiedNoteBookPath(_FromNoteBook))
+                                      .arg(_FileName);
+
+        QStringList _Splited = _FileName.split(wxNote::g_NoteNameSplitSymbol);
+        _Splited[0] = _2NoteBook;
+
+        QString _NewName = _Splited.join(wxNote::g_NoteNameSplitSymbol);
+
+        bool _IsSuccessful =
+                QFile::copy(_OldPath, tr("%1/%2").arg(_GetSpecifiedNoteBookPath(_2NoteBook))
+                                                 .arg(_NewName));
+        if (_IsSuccessful)
+            {
+            QFile::remove(_OldPath);
+
+            return true;
+            }
+
+        return false;
+        }
+
     /* _wxNote_TabWidgetChangedSlot()槽实现 */
     void _MainWindowNormal::_wxNote_TabWidgetChangedSlot(int _TabIndex)
         {
@@ -1952,21 +1978,9 @@
                 QStringList _NoteFileNames = _Dir.entryList();
 
                 for (const QString& _Elem : _NoteFileNames)
-                    {
-                    QString _CurrentNotePath = tr("%1/%2/%3")
-                                                .arg(wxNote::g_LocalFilePath)
-                                                .arg(_DeletedNoteBookName)
-                                                .arg(_Elem);
-
-                    QStringList _Splited = _Elem.split(wxNote::g_NoteNameSplitSymbol);
-                    _Splited[0] = wxNote::g_AllNotesName;
-
-                    QString _NewName = _Splited.join(wxNote::g_NoteNameSplitSymbol);
-
-                    QFile::copy(_CurrentNotePath, tr("%1/%2")
-                                                    .arg(wxNote::g_LocalFilePath)
-                                                    .arg(_NewName));
-                    }
+                    _MoveNoteFile2OtherOne(_DeletedNoteBookName
+                                           , _Elem
+                                           , wxNote::g_AllNotesName);
 
                 _Dir.removeRecursively();
                 }
@@ -2635,10 +2649,10 @@
     QString _MainWindowNormal
         ::_GetSpecifiedNoteBookPath(const QString &_NoteBookName)
         {
-        QString _CurrentPath = tr("%1/%2").arg(wxNote::g_LocalFilePath)
+        QString _CurrentPath = tr("%1%2").arg(wxNote::g_LocalFilePath)
                                           .arg((_NoteBookName == wxNote::g_AllNotesName)
                                                               ? QString()
-                                                              : _NoteBookName);
+                                                              : '/' + _NoteBookName);
         return _CurrentPath;
         }
 #if 0

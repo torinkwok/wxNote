@@ -227,6 +227,10 @@ protected:
     void _SetOneKeyLockEnabled();
     void _SetNoteEditEnabled();
 
+    bool _MoveNoteFile2OtherOne(const QString& _FromNoteBook,
+                                const QString& _FileName,
+                                const QString& _2NoteBook);
+
     void _DeleteSavedContext(const QString& _NoteTitle);
     void _EraseNoteBookName_WhenDeleted(const QString& _NoteBookName);
     void _EraseLastPitchOnItem_inNoteBookList(const QString& _NoteBookName);
