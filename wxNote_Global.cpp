@@ -236,10 +236,15 @@ namespace wxNote
                                         wxNote::_NoteRating _CurrentNoteRating =
                                                     _NoteElem->_GetBindTextEW()->_GetNoteRating();
 
+                                        QString _CreateDate_Str = _NoteElem->_GetCreateDate().toString(Qt::ISODate);
+                                        QString _CreateTime_Str = _NoteElem->_GetCreateTime().toString("hh-mm-ss");
+
                                         if (_Splited.at(1) == _NoteElem->_GetNoteNameSlot()
                                                 && bool(_Splited.at(2).toInt()) == _IsCurrentNoteLocking
                                                 && wxNote::_NoteCategories(_Splited.at(3).toInt()) == _CurrentNoteCategories
-                                                && wxNote::_NoteRating(_Splited.at(4).toInt()) == _CurrentNoteRating)
+                                                && wxNote::_NoteRating(_Splited.at(4).toInt()) == _CurrentNoteRating
+                                                && _Splited.at(5) == _CreateDate_Str
+                                                && _Splited.at(6) == _CreateTime_Str)
                                             return true;
                                         }
                                     }

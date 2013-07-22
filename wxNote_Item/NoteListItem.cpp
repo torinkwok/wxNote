@@ -43,7 +43,6 @@
           enum_NoteRating(wxNote::_NonRating),
           enum_NoteCategories(wxNote::_NonCategories)
         {
-        cout << __FUNCTION__ << endl;
         cout << enum_NoteCategories << endl;
         cout << enum_NoteRating << endl << endl;
 
