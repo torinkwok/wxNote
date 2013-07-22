@@ -70,11 +70,11 @@ namespace wxNote
     typedef enum { _Normal, _Shadow } _ParentWindowType;
 
     typedef enum
-        { _NonCategories, _Important,
+        { _NonCategories = 0, _Important,
           _Work, _Personal, _ToDo, _Later } _NoteCategories;
 
     typedef enum
-        { _NonRating, _Poor, _Fair, _Average, _Good, _Excellent } _NoteRating;
+        { _NonRating = 0, _Poor, _Fair, _Average, _Good, _Excellent } _NoteRating;
 
     /* 用于存储用户创建的所有笔记本的名称, 不允许重复 */
     extern QStringList g_UserNoteBookNameList;

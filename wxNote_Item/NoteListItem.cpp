@@ -38,10 +38,15 @@
     /* 构造函数实现 */
     _NoteListItem::_NoteListItem(const QIcon &_IconName,
                                  const QString &_ItemName)
-        : QListWidgetItem(_IconName, _ItemName), m_ParentNoteBookName_Current(""),
+        : QListWidgetItem(_IconName, _ItemName),
+          m_ParentNoteBookName_Current(""),
           enum_NoteRating(wxNote::_NonRating),
           enum_NoteCategories(wxNote::_NonCategories)
         {
+        cout << __FUNCTION__ << endl;
+        cout << enum_NoteCategories << endl;
+        cout << enum_NoteRating << endl << endl;
+
         setFont(QFont("微软雅黑,12,-1,5,50,0,0,0,0,0"));
         setSizeHint(QSize(200, 80));
         setTextColor(QColor(50, 51, 46));

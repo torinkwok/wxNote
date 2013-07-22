@@ -213,7 +213,7 @@ namespace wxNote
 
     /* _Deleted_LoseHome_NoteFile()函数实现 */
     void _Deleted_LoseHome_NoteFile(const QString &_CurrentPath,
-                                    const QList<_NoteListItem *> &_Notes)
+                                    const QList<_NoteListItem *>& _Notes)
         {
         QDir _CurrentDir(_CurrentPath);
         QStringList _NoteFileNames = _CurrentDir.entryList();
@@ -230,8 +230,11 @@ namespace wxNote
                                         QStringList _Splited = _Elem.split(wxNote::g_NoteNameSplitSymbol);
 
                                         bool _IsCurrentNoteLocking = _NoteElem->_GetBindTextEW()->_IsLocking();
-                                        wxNote::_NoteCategories _CurrentNoteCategories = _NoteElem->_GetNoteCategories();
-                                        wxNote::_NoteRating _CurrentNoteRating = _NoteElem->_GetNoteRating();
+
+                                        wxNote::_NoteCategories _CurrentNoteCategories =
+                                                    _NoteElem->_GetBindTextEW()->_GetNoteCategories();
+                                        wxNote::_NoteRating _CurrentNoteRating =
+                                                    _NoteElem->_GetBindTextEW()->_GetNoteRating();
 
                                         if (_Splited.at(1) == _NoteElem->_GetNoteNameSlot()
                                                 && bool(_Splited.at(2).toInt()) == _IsCurrentNoteLocking
@@ -246,10 +249,6 @@ namespace wxNote
 
         if (_Iter != _NoteFileNames.end())
             _NoteFileNames.erase(_Iter, _NoteFileNames.end());
-
-        for (const QString& _Elem : _NoteFileNames)
-            cout << _Elem << "  |  ";
-        cout << endl << endl;
 
         /* 删除当前目录中"无家可归"的文件... */
         std::for_each(_NoteFileNames.begin(), _NoteFileNames.end(),

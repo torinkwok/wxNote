@@ -1347,7 +1347,7 @@
         QString _CurrentNoteBookName = _GetParentNoteBookName_Current();
         QString _CurrentNoteTitle = m_NoteTitleLineEdit->text();
 
-        QString _NoteName = tr("%1.~_%2.~_%3.~_%4.~_%5.~_%6.~_%7")
+        QString _NoteName = tr("%1.~_%2.~_%3.~_%4.~_%5.~_%6.~_%7.~_.html")
                                                         .arg(_CurrentNoteBookName)
                                                         .arg(_CurrentNoteTitle)
                                                         .arg(int(mb_IsLocking))
@@ -1356,7 +1356,7 @@
                                                         .arg(m_CreateDate.toString(Qt::ISODate))
                                                         .arg(m_CreateTime.toString("hh-mm-ss"));
 
-        QFile _OutFile(tr("%1/%2/%3.html").arg(wxNote::g_LocalFilePath)
+        QFile _OutFile(tr("%1/%2/%3").arg(wxNote::g_LocalFilePath)
                                           .arg((_CurrentNoteBookName == wxNote::g_AllNotesName)
                                                                         ? QString()
                                                                         : _CurrentNoteBookName)
