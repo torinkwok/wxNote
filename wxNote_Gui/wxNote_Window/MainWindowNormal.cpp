@@ -1476,9 +1476,6 @@
         _EditWindow->_SetCreateDate(_CreateDate);
         _EditWindow->_SetCreateTime(_CreateTime);
 
-//        cout << "Date: " << _CreateDate.toString(Qt::ISODate) << endl;
-//        cout << "Time: " << _CreateTime.toString("hh-mm-ss") << endl;
-
         connect(_EditWindow, SIGNAL(_DeleteNonMatchedNoteFileSignal(QString)),
                 this, SLOT(_DeleteNonMatchedNoteFile(QString)));
 
@@ -1949,8 +1946,30 @@
 
             QString _Path = _GetSpecifiedNoteBookPath(_DeletedNoteBookName);
             QDir _Dir(_Path);
+
             if (_Dir.exists())
+                {
+                QStringList _NoteFileNames = _Dir.entryList();
+
+                for (const QString& _Elem : _NoteFileNames)
+                    {
+                    QString _CurrentNotePath = tr("%1/%2/%3")
+                                                .arg(wxNote::g_LocalFilePath)
+                                                .arg(_DeletedNoteBookName)
+                                                .arg(_Elem);
+
+                    QStringList _Splited = _Elem.split(wxNote::g_NoteNameSplitSymbol);
+                    _Splited[0] = wxNote::g_AllNotesName;
+
+                    QString _NewName = _Splited.join(wxNote::g_NoteNameSplitSymbol);
+
+                    QFile::copy(_CurrentNotePath, tr("%1/%2")
+                                                    .arg(wxNote::g_LocalFilePath)
+                                                    .arg(_NewName));
+                    }
+
                 _Dir.removeRecursively();
+                }
 
             delete m_NoteBookTree->currentItem();
 
@@ -2625,7 +2644,7 @@
 #if 0
     void _MainWindowNormal::_SynchronousSlot()
         {
-        cout << wxNote::g_LocalFilePath << endl;
+        QFile::copy("D:/lineEdit1.png", "C:/Copy.png");
         }
 #endif
 
