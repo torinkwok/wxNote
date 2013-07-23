@@ -1807,6 +1807,10 @@
 
         if (_CurrentNoteItem)
             {
+            _MoveNoteFile2OtherOne(wxNote::g_TrashName,
+                                   wxNote::_GetMatchedNoteFile_byNoteItem(_CurrentNoteItem),
+                                   _CurrentNoteItem->_GetBindTextEW()->_GetParentNoteBookName_BeforeDeleted());
+
             QString _BeforeDeletedParentNoteBookName =
                     _CurrentNoteItem->_GetBeforeDeletedParentNoteBookName();
 
