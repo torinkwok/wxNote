@@ -1870,13 +1870,6 @@
     /* _MoveCurrentNote2OtherNoteBook()槽实现 */
     void _MainWindowNormal::_MoveCurrentNote2OtherNoteBook(const QString &_NoteBookName)
         {
-//        if (_NoteBookName == wxNote::g_TrashName)
-//            {
-//            _MoveNote2TrashSlot();
-
-//            return;
-//            }
-
         QString _CurrentNoteBookName = m_NoteBookTree->currentItem()->text(0);
 
         if (_NoteBookName != _CurrentNoteBookName)

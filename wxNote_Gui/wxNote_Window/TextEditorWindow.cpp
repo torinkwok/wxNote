@@ -923,11 +923,10 @@
             {
             QString _ActionText = _TriggeredAction->text();
 
+            /* 当用户触发的是"废纸篓"action,
+             * 则转交_MainWindowNormal::_MoveNote2TrashSlot()处理 */
             if (!_ActionText.isEmpty() && (_ActionText != wxNote::g_TrashName))
-                {
-                cout << __FUNCTION__ << endl;
                 emit _CurrentNoteBeMove2OtherNoteBookSignal(_ActionText);
-                }
             }
         else
             __PTR_INVALID_ERROR_OUTPUT__(_TriggeredAction)
