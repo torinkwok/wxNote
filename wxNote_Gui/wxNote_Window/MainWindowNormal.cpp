@@ -436,10 +436,8 @@
                             std::for_each(_NoteNames.begin() + 2, _NoteNames.end(),
                                           [this, &_NoteBookPath](const QString& _NoteElem)
                                             {
-                                            QString _CurrentNotePath = tr("%1/%2").arg(_NoteBookPath)
-                                                                                  .arg(_NoteElem);
-
-                                            QStringList _Splited = _NoteElem.split(wxNote::g_NoteNameSplitSymbol);
+                                            _RestoreSpecifiedNoteFile(_NoteBookPath,
+                                                                      _NoteElem);
                                             });
                             }
                         });
@@ -447,8 +445,14 @@
 
     /* _RestoreSpecifiedNoteFile()函数实现 */
     void _MainWindowNormal
-        ::_RestoreSpecifiedNoteFile(const QString &_NoteFilePath)
+        ::_RestoreSpecifiedNoteFile(const QString &_NoteBookPath,
+                                    const QString &_NoteFileName)
         {
+        QString _NoteFilePath = tr("%1/%2").arg(_NoteBookPath)
+                                           .arg(_NoteFileName);
+
+        QStringList _Splited = _NoteFileName.split(wxNote::g_NoteNameSplitSymbol);
+
         QFile _NoteFile(_NoteFilePath);
         if (_NoteFile.open(QFile::ReadOnly))
             {

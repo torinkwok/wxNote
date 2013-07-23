@@ -190,7 +190,8 @@ protected slots:
 
 protected:
     void _RestoreUserNoteFile();
-    void _RestoreSpecifiedNoteFile(const QString& _NoteFilePath);
+    void _RestoreSpecifiedNoteFile(const QString& _NoteBookPath,
+                                   const QString& _NoteFileName);
 
     void _CreateActionsAndSubMenu();
     void _CreateMainWinMenus();
