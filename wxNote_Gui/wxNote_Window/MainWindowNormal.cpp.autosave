@@ -438,7 +438,7 @@
                                             {
                                             QString _CurrentNotePath = tr("%1/%2").arg(_NoteBookPath)
                                                                                   .arg(_NoteElem);
-
+                                            
                                             QStringList _Splited = _NoteElem.split(wxNote::g_NoteNameSplitSymbol);
                                             });
                             }
