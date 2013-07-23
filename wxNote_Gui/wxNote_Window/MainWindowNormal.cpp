@@ -1870,37 +1870,54 @@
     /* _MoveCurrentNote2OtherNoteBook()槽实现 */
     void _MainWindowNormal::_MoveCurrentNote2OtherNoteBook(const QString &_NoteBookName)
         {
+//        if (_NoteBookName == wxNote::g_TrashName)
+//            {
+//            _MoveNote2TrashSlot();
+
+//            return;
+//            }
+
         QString _CurrentNoteBookName = m_NoteBookTree->currentItem()->text(0);
 
         if (_NoteBookName != _CurrentNoteBookName)
             {
             _NoteListItem* _CurrentNoteItem = m_NoteList->_GetCurrentItem();
-            _TextEditorWindow* _CurrentEditorWindow =
-                    wxNote::_GetEWFromGlobalList_BySpecifiedItem(_CurrentNoteItem);
 
-            m_TextEditorStackedLayout->setCurrentIndex(
-                        m_NoteList->_GetIndexFromItem(_CurrentNoteItem).row());
-            QWidget* _CurrentSplitter =
-                    m_TextEditorStackedLayout->currentWidget();
-
-            _CurrentNoteItem->_SetParentNoteBookName(_NoteBookName);
-
-            if (_CurrentNoteBookName != wxNote::g_AllNotesName
-                    && _CurrentNoteBookName != wxNote::g_NoteBooksName)
+            if (_CurrentNoteItem)
                 {
-                _CurrentNoteItem->setHidden(true);
-                _CurrentSplitter->setHidden(true);
+                _TextEditorWindow* _CurrentEditorWindow =
+                        wxNote::_GetEWFromGlobalList_BySpecifiedItem(_CurrentNoteItem);
 
-                _CurrentEditorWindow->_SetParentNoteBookName_Current(_NoteBookName);
+                _MoveNoteFile2OtherOne(_CurrentNoteBookName
+                                       , wxNote::_GetMatchedNoteFile_byNoteItem(_CurrentNoteItem)
+                                       , _NoteBookName);
 
-                _NoteListItem* _FirstItem =
-                        _GetFirstNoteInSpecifiedNoteBook(_CurrentNoteBookName);
-                if (_FirstItem)
-                    m_NoteList->setCurrentItem(_FirstItem);
+                m_TextEditorStackedLayout->setCurrentIndex(
+                            m_NoteList->_GetIndexFromItem(_CurrentNoteItem).row());
+                QWidget* _CurrentSplitter =
+                        m_TextEditorStackedLayout->currentWidget();
 
-                if (_IsCurrentNoteListAllHidden())
-                    _EraseLastPitchOnItem_inNoteBookList(_CurrentNoteBookName);
+                _CurrentNoteItem->_SetParentNoteBookName(_NoteBookName);
+
+                if (_CurrentNoteBookName != wxNote::g_AllNotesName
+                        && _CurrentNoteBookName != wxNote::g_NoteBooksName)
+                    {
+                    _CurrentNoteItem->setHidden(true);
+                    _CurrentSplitter->setHidden(true);
+
+                    _CurrentEditorWindow->_SetParentNoteBookName_Current(_NoteBookName);
+
+                    _NoteListItem* _FirstItem =
+                            _GetFirstNoteInSpecifiedNoteBook(_CurrentNoteBookName);
+                    if (_FirstItem)
+                        m_NoteList->setCurrentItem(_FirstItem);
+
+                    if (_IsCurrentNoteListAllHidden())
+                        _EraseLastPitchOnItem_inNoteBookList(_CurrentNoteBookName);
+                    }
                 }
+            else
+                __PTR_INVALID_ERROR_OUTPUT__(_CurrentNoteItem)
             }
         }
 

@@ -924,7 +924,10 @@
             QString _ActionText = _TriggeredAction->text();
 
             if (!_ActionText.isEmpty() && (_ActionText != wxNote::g_TrashName))
+                {
+                cout << __FUNCTION__ << endl;
                 emit _CurrentNoteBeMove2OtherNoteBookSignal(_ActionText);
+                }
             }
         else
             __PTR_INVALID_ERROR_OUTPUT__(_TriggeredAction)
