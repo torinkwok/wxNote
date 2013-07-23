@@ -288,6 +288,69 @@
         emit _SetNoteListPreview(this, _NoteTitle, _PreviewText);
         }
 
+    /* _SetNoteRating()函数实现 */
+    void _TextEditorWindow
+        ::_SetNoteRating(const wxNote::_NoteRating &_Rating)
+        {
+        switch (_Rating)
+            {
+        case wxNote::_Excellent:
+            _SetNoteRatingIs_Excellent();
+            break;
+
+        case wxNote::_Good:
+            _SetNoteRatingIs_Good();
+            break;
+
+        case wxNote::_Average:
+            _SetNoteRatingIs_Average();
+            break;
+
+        case wxNote::_Fair:
+            _SetNoteRatingIs_Fair();
+            break;
+
+        case wxNote::_Poor:
+            _SetNoteRatingIs_Poor();
+            break;
+
+        default:
+            _SetNoteRatingIs_NonRating();
+            }
+        }
+
+
+    /* _SetNoteCategories()函数实现 */
+    void _TextEditorWindow
+        ::_SetNoteCategories(const wxNote::_NoteCategories &_Categories)
+        {
+        switch (_Categories)
+            {
+        case wxNote::_Important:
+            _SetNoteCategoriesIs_Important();
+            break;
+
+        case wxNote::_Work:
+            _SetNoteCategoriesIs_Work();
+            break;
+
+        case wxNote::_Personal:
+            _SetNoteCategoriesIs_Personal();
+            break;
+
+        case wxNote::_ToDo:
+            _SetNoteCategories_ToDo();
+            break;
+
+        case wxNote::_Later:
+            _SetNoteCategoriesIs_Later();
+            break;
+
+        default:
+            _SetNoteCategoriesIs_NonCategories();
+            }
+        }
+
     /* _GetBindNoteItem()函数实现 */
     _NoteListItem* _TextEditorWindow::_GetBindNoteItem() const
         {

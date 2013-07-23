@@ -489,6 +489,9 @@
                                                 _CurrentEditorWindow->_SetCreateTime(_CreateTime);
 
                                                 _CurrentEditorWindow->_GetTextEditor()->setHtml(_NoteContent);
+
+                                                _CurrentEditorWindow->_SetNoteCategories(_NoteCategories);
+                                                _CurrentEditorWindow->_SetNoteRating(_NoteRating);
                                                 _CurrentEditorWindow->_SaveCurrentNoteSlot();
                                                 }
                                             });
@@ -2780,8 +2783,8 @@
 #if 0
     void _MainWindowNormal::_SynchronousSlot()
         {
-        cout << wxNote::_GetMatchedNoteFile_byNoteItem(m_NoteList->_GetCurrentItem())
-             << endl;
+        m_NoteList->_GetCurrentItem()->_GetBindTextEW()->_SetNoteCategories(wxNote::_Work);
+        m_NoteList->_GetCurrentItem()->_GetBindTextEW()->_SetNoteRating(wxNote::_Average);
         }
 #endif
 

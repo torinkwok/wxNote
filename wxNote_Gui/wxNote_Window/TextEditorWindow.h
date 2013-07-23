@@ -172,6 +172,9 @@ public:
 
     void _EmitPreviewText(const QString& _NoteTitle);
 
+    void _SetNoteCategories(const wxNote::_NoteCategories& _Categories);
+    void _SetNoteRating(const wxNote::_NoteRating& _Rating);
+
 public slots:
     void _SetNoteRatingIs_NonRating();
     void _SetNoteRatingIs_Excellent();
