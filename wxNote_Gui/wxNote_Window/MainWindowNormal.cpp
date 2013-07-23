@@ -1898,6 +1898,7 @@
                         m_TextEditorStackedLayout->currentWidget();
 
                 _CurrentNoteItem->_SetParentNoteBookName(_NoteBookName);
+                _CurrentNoteItem->_SetBeforeDeletedParentNoteBookName(_NoteBookName);
 
                 if (_CurrentNoteBookName != wxNote::g_AllNotesName
                         && _CurrentNoteBookName != wxNote::g_NoteBooksName)
@@ -1906,6 +1907,7 @@
                     _CurrentSplitter->setHidden(true);
 
                     _CurrentEditorWindow->_SetParentNoteBookName_Current(_NoteBookName);
+                    _CurrentEditorWindow->_SetParentNoteBookName_BeforeDeleted(_NoteBookName);
 
                     _NoteListItem* _FirstItem =
                             _GetFirstNoteInSpecifiedNoteBook(_CurrentNoteBookName);
