@@ -192,7 +192,7 @@ namespace wxNote
         }
 
     /* _InitializeNoteBooks()函数实现 */
-    void _InitializeNoteBooks()
+    QStringList _InitializeNoteBooks()
         {
         wxNote::g_Settings.beginGroup("MainWindow");
 
@@ -209,6 +209,8 @@ namespace wxNote
                 }
 
         wxNote::g_Settings.endGroup();
+
+        return _UserNoteBookNames;
         }
 
     /* _Deleted_LoseHome_NoteFile()函数实现 */

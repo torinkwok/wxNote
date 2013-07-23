@@ -151,7 +151,7 @@ namespace wxNote
     inline void _PointerChecker(const void* _SomePtr);
 
     void _InitializeGlobalFilePath();
-    void _InitializeNoteBooks();
+    QStringList _InitializeNoteBooks();
 
     void _Deleted_LoseHome_NoteFile(const QString& _CurrentPath,
                                     const QList<_NoteListItem *>& _Notes);

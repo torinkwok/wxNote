@@ -83,7 +83,11 @@
           m_MatchNoteItemDye(QColor(215, 168, 189), Qt::Dense1Pattern)
         {
         wxNote::_InitializeGlobalFilePath();
-        wxNote::_InitializeNoteBooks();
+        QStringList _Names = wxNote::_InitializeNoteBooks();
+
+        for (const QString& _Elem : _Names)
+            wxNote::g_NoteBookNameActionList
+                        .push_back(new QAction(_Elem, this));
 
         _CreateActionsAndSubMenu();
         _CreateToolButtonOnToolBar();
