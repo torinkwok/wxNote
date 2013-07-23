@@ -128,6 +128,8 @@
                        .arg(m_NoteBookTree->currentItem()->text(0)));
         setWindowIcon(QIcon(":/wxNote_Icons/wxNoteicon.png"));
         _ReadSettings();
+
+        _RestoreUserNoteFile();
         }
 
     /* _GetOwnershipFromShadowWindow()函数实现 */
@@ -412,6 +414,87 @@
 
     /////////////////////////////////////////////////////////////////////////
     //..protected部分
+
+    /* _RestoreUserNoteFile()函数实现 */
+    void _MainWindowNormal::_RestoreUserNoteFile()
+        {
+        using namespace wxNote;
+
+        QDir _MainDir(g_LocalFilePath);
+        QStringList _DirOrFileNames = _MainDir.entryList();
+
+        std::for_each(_DirOrFileNames.begin() + 2, _DirOrFileNames.end(),
+                      [this](const QString& _Elem)
+                        {
+                        if (!_Elem.contains(wxNote::g_NoteNameSplitSymbol))
+                            {
+                            QString _NoteBookPath = _GetSpecifiedNoteBookPath(_Elem);
+                            QDir _NoteBookDir(_NoteBookPath);
+
+                            QStringList _NoteNames = _NoteBookDir.entryList();
+
+                            std::for_each(_NoteNames.begin() + 2, _NoteNames.end(),
+                                          [this, &_NoteBookPath](const QString& _NoteElem)
+                                            {
+                                            QString _CurrentNotePath = tr("%1/%2").arg(_NoteBookPath)
+                                                                                  .arg(_NoteElem);
+
+                                            QStringList _Splited = _NoteElem.split(wxNote::g_NoteNameSplitSymbol);
+
+                                            QFile _NoteFile(_CurrentNotePath);
+                                            if (_NoteFile.open(QFile::ReadOnly))
+                                                {
+                                                QTextStream _Cin(&_NoteFile);
+                                                QString _NoteContent(_Cin.readAll());
+
+                                                QString _NoteBookName = _Splited.at(0);
+                                                QString _CurrentNoteTitle = _Splited.at(1);
+
+                                                bool _IsLocking = bool(_Splited.at(2).toInt());
+
+                                                wxNote::_NoteCategories _NoteCategories =
+                                                        wxNote::_NoteCategories(_Splited.at(3).toInt());
+                                                wxNote::_NoteRating _NoteRating =
+                                                        wxNote::_NoteRating(_Splited.at(4).toInt());
+
+                                                QStringList _CreateDateSplited = _Splited.at(5).split('-');
+                                                int _Year = _CreateDateSplited.at(0).toInt();
+                                                int _Month = _CreateDateSplited.at(1).toInt();
+                                                int _Day = _CreateDateSplited.at(2).toInt();
+                                                QDate _CreateDate(_Year, _Month, _Day);
+
+                                                QStringList _CreateTimeSplited = _Splited.at(6).split('-');
+                                                int _Hour = _CreateTimeSplited.at(0).toInt();
+                                                int _Minute = _CreateTimeSplited.at(1).toInt();
+                                                int _Second = _CreateTimeSplited.at(2).toInt();
+                                                QTime _CreateTime(_Hour, _Minute, _Second);
+
+                                                QPair<_NoteListItem *, _TextEditorWindow *>
+                                                                        _RetPair = _NewNoteSlot();
+
+                                                _NoteListItem* _CurrentNoteItem = _RetPair.first;
+                                                _TextEditorWindow* _CurrentEditorWindow = _RetPair.second;
+
+                                                _CurrentNoteItem->_SetParentNoteBookName(_NoteBookName);
+                                                _CurrentNoteItem->_SetBeforeDeletedParentNoteBookName(_NoteBookName);
+
+                                                _CurrentEditorWindow->_SetParentNoteBookName_Current(_NoteBookName);
+                                                _CurrentEditorWindow->_SetParentNoteBookName_BeforeDeleted(_NoteBookName);
+
+                                                _CurrentEditorWindow->_GetTitleLineEdit()->setText(_CurrentNoteTitle);
+                                                if (_IsLocking)
+                                                    _CurrentEditorWindow->_LockCurrentNoteSlot();
+
+                                                _CurrentEditorWindow->_SetCreateDate(_CreateDate);
+                                                _CurrentEditorWindow->_SetCreateTime(_CreateTime);
+
+                                                _CurrentEditorWindow->_GetTextEditor()->setHtml(_NoteContent);
+                                                _CurrentEditorWindow->_SaveCurrentNoteSlot();
+                                                }
+                                            });
+                            }
+                        });
+        }
 
     /* _CreateActionsAndSubMenu()函数重写 */
     void _MainWindowNormal::_CreateActionsAndSubMenu()
@@ -1446,14 +1529,17 @@
         }
 
     /* _NewNoteSlot()槽重写 */
-    void _MainWindowNormal::_NewNoteSlot()
+    QPair<_NoteListItem*, _TextEditorWindow *>
+        _MainWindowNormal::_NewNoteSlot()
         {
         /* 遍历笔记列表, 如果当前笔记列表中存在"无标题笔记", 那么将不会重复创建 */
         for (int _Index = 0; _Index < m_NoteList->count(); _Index++)
             {
             if (!m_NoteList->item(_Index)->isHidden()
                     && m_NoteList->_Item(_Index)->_GetNoteNameSlot() == wxNote::g_NonTitleNoteName)
-                return;
+
+                return qMakePair(new _NoteListItem(),
+                                 new _TextEditorWindow());
             }
 
         QString _CurrentDate = QDate::currentDate().toString(Qt::ISODate);
@@ -1588,6 +1674,8 @@
         _SetDeleteNoteEnabled();
         _SetOneKeyLockEnabled();
         _SetNoteEditEnabled();
+
+        return qMakePair(_Item, _EditWindow);
         }
 
     /* _MoveNote2TrashSlot()槽实现 */

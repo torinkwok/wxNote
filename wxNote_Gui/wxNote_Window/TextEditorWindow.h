@@ -81,6 +81,9 @@ public:
 
     bool _IsLocking() const
                     { return mb_IsLocking; }
+    void _SetIsLocking(const bool& _Is)
+                    { mb_IsLocking = _Is; }
+
     QToolButton* _GetLockButton() const
                     { return m_LockCurrentTextEditToolButton; }
 
