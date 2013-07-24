@@ -426,6 +426,7 @@
         std::for_each(_DirOrFileNames.begin() + 2, _DirOrFileNames.end(),
                       [this](const QString& _Elem)
                         {
+                        /* 如果当前_Elem是一个目录的名称(其他笔记本)... */
                         if (!_Elem.contains(wxNote::g_NoteNameSplitSymbol))
                             {
                             QString _NoteBookPath = _GetSpecifiedNoteBookPath(_Elem);
@@ -440,6 +441,8 @@
                                                                       _NoteElem);
                                             });
                             }
+                        else    /* 否则就是一个笔记名称(全部笔记)... */
+                            _RestoreSpecifiedNoteFile(g_LocalFilePath, _Elem);
                         });
         }
 
