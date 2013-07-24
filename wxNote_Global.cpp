@@ -222,35 +222,14 @@ namespace wxNote
         QStringList _NoteFileNames = _CurrentDir.entryList();
 
         /* 将当前目录中"无家可归"的文件名保留下来... */
-        auto _Iter =
+        QStringList::iterator _Iter =
             std::remove_if(_NoteFileNames.begin() + 2, _NoteFileNames.end(),
                            [&_Notes](const QString& _Elem)
                                 {
                                 for (const _NoteListItem* _NoteElem : _Notes)
-                                    {
                                     if (_Elem.contains(wxNote::g_NoteNameSplitSymbol))
-                                        {
-                                        QStringList _Splited = _Elem.split(wxNote::g_NoteNameSplitSymbol);
-
-                                        bool _IsCurrentNoteLocking = _NoteElem->_GetBindTextEW()->_IsLocking();
-
-                                        wxNote::_NoteCategories _CurrentNoteCategories =
-                                                    _NoteElem->_GetBindTextEW()->_GetNoteCategories();
-                                        wxNote::_NoteRating _CurrentNoteRating =
-                                                    _NoteElem->_GetBindTextEW()->_GetNoteRating();
-
-                                        QString _CreateDate_Str = _NoteElem->_GetCreateDate().toString(Qt::ISODate);
-                                        QString _CreateTime_Str = _NoteElem->_GetCreateTime().toString("hh-mm-ss");
-
-                                        if (_Splited.at(1) == _NoteElem->_GetNoteNameSlot()
-                                                && bool(_Splited.at(2).toInt()) == _IsCurrentNoteLocking
-                                                && wxNote::_NoteCategories(_Splited.at(3).toInt()) == _CurrentNoteCategories
-                                                && wxNote::_NoteRating(_Splited.at(4).toInt()) == _CurrentNoteRating
-                                                && _Splited.at(5) == _CreateDate_Str
-                                                && _Splited.at(6) == _CreateTime_Str)
+                                        if (_Compare_NoteElemAndNoteFileName(_Elem, _NoteElem))
                                             return true;
-                                        }
-                                    }
 
                                 return false;
                                 });
@@ -279,6 +258,20 @@ namespace wxNote
         QDir _Dir(_NotePath);
         QStringList _NoteFileNames = _Dir.entryList();
 
+        for (const QString& _Elem : _NoteFileNames)
+            if (_Elem.contains(wxNote::g_NoteNameSplitSymbol))
+                if (_Compare_NoteElemAndNoteFileName(_Elem, _NoteItem))
+                    return _Elem;
+
+        return QString();
+        }
+
+    /* _Compare_NoteElemAndNoteFileName()函数实现 */
+    bool _Compare_NoteElemAndNoteFileName(const QString &_NoteFileName,
+                                          const _NoteListItem *_NoteItem)
+        {
+        QStringList _Splited = _NoteFileName.split(wxNote::g_NoteNameSplitSymbol);
+
         bool _IsCurrentNoteLocking = _NoteItem->_GetBindTextEW()->_IsLocking();
 
         wxNote::_NoteCategories _CurrentNoteCategories =
@@ -289,23 +282,12 @@ namespace wxNote
         QString _CreateDate_Str = _NoteItem->_GetCreateDate().toString(Qt::ISODate);
         QString _CreateTime_Str = _NoteItem->_GetCreateTime().toString("hh-mm-ss");
 
-        for (const QString& _Elem : _NoteFileNames)
-            {
-            if (_Elem.contains(wxNote::g_NoteNameSplitSymbol))
-                {
-                QStringList _Splited = _Elem.split(wxNote::g_NoteNameSplitSymbol);
-
-                if (_Splited.at(1) == _NoteItem->_GetNoteNameSlot()
-                        && bool(_Splited.at(2).toInt()) == _IsCurrentNoteLocking
-                        && wxNote::_NoteCategories(_Splited.at(3).toInt()) == _CurrentNoteCategories
-                        && wxNote::_NoteRating(_Splited.at(4).toInt()) == _CurrentNoteRating
-                        && _Splited.at(5) == _CreateDate_Str
-                        && _Splited.at(6) == _CreateTime_Str)
-                    return _Elem;
-                }
-            }
-
-        return QString();
+        return (_Splited.at(1) == _NoteItem->_GetNoteNameSlot()
+                    && bool(_Splited.at(2).toInt()) == _IsCurrentNoteLocking
+                    && wxNote::_NoteCategories(_Splited.at(3).toInt()) == _CurrentNoteCategories
+                    && wxNote::_NoteRating(_Splited.at(4).toInt()) == _CurrentNoteRating
+                    && _Splited.at(5) == _CreateDate_Str
+                    && _Splited.at(6) == _CreateTime_Str) ? true : false;
         }
 
     /* _GetEWFromGlobalList_BySpecifiedItem()函数实现
