@@ -156,6 +156,9 @@ namespace wxNote
     void _Deleted_LoseHome_NoteFile(const QString& _CurrentPath,
                                     const QList<_NoteListItem *>& _Notes);
 
+    void _Deleted_SpecifiedNoteFile(const QString& _NoteBookPath,
+                                    const _NoteListItem* _NoteItem);
+
     QString _GetMatchedNoteFile_byNoteItem(const _NoteListItem* _NoteItem);
 
     bool _Compare_NoteElemAndNoteFileName(const QString& _NoteFileName,

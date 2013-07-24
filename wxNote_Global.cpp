@@ -247,6 +247,16 @@ namespace wxNote
                             });
         }
 
+    /* _Deleted_SpecifiedNoteFile()函数实现 */
+    void _Deleted_SpecifiedNoteFile(const QString &_NoteBookPath,
+                                    const _NoteListItem *_NoteItem)
+        {
+        QString _NoteFilePath(QObject::tr("%1/%2")
+                                            .arg(_NoteBookPath)
+                                            .arg(_GetMatchedNoteFile_byNoteItem(_NoteItem)));
+        QFile::remove(_NoteFilePath);
+        }
+
     /* _GetMatchedNoteFile_byNoteItem()函数实现 */
     QString _GetMatchedNoteFile_byNoteItem(const _NoteListItem *_NoteItem)
         {

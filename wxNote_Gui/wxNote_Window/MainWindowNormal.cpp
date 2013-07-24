@@ -1885,6 +1885,10 @@
                 _EraseNoteItemFromDeletedList(m_NoteList->currentItem());
                 _EraseCurrentEditorWindowFromGlobalList();
 
+                QString _NoteParentBook = _CurrentNoteItem->_GetParentNoteBookName();
+                wxNote::_Deleted_SpecifiedNoteFile(_GetSpecifiedNoteBookPath(_NoteParentBook),
+                                                   _CurrentNoteItem);
+
                 delete m_TextEditorStackedLayout->currentWidget();
                 delete m_NoteList->currentItem();
 
@@ -1908,8 +1912,6 @@
         _SetDeleteNoteEnabled();
         _SetOneKeyLockEnabled();
         _SetNoteEditEnabled();
-
-        _DeleteNonMatchedNoteFile(_CurrentNoteItem->_GetParentNoteBookName());
         }
 
     /* _RestoreNoteSlot()槽实现 */
