@@ -1830,11 +1830,11 @@
         {
         QString _CurrentNoteBookName = m_NoteBookTree->currentItem()->text(0);
 
+        _NoteListItem* _CurrentNoteItem = m_NoteList->_GetCurrentItem();
+
         /* 只有在当前笔记列表不为空的情况下才会响应Delete按钮 */
         if (!_IsCurrentNoteListAllHidden())
             {
-            QListWidgetItem* _CurrentNoteItem = m_NoteList->currentItem();
-
             _TextEditorWindow* _CurrentEditorWindow =
                             wxNote::_GetEWFromGlobalList_BySpecifiedItem(_CurrentNoteItem);
 
@@ -1899,7 +1899,7 @@
         _SetOneKeyLockEnabled();
         _SetNoteEditEnabled();
 
-        _DeleteNonMatchedNoteFile(_CurrentNoteBookName);
+        _DeleteNonMatchedNoteFile(_CurrentNoteItem->_GetParentNoteBookName());
         }
 
     /* _RestoreNoteSlot()槽实现 */
@@ -2348,6 +2348,7 @@
         QList<_NoteListItem *> _Notes =
                 m_NoteList->_GetNotesInSpecifiedNoteBook(_CurrentNoteBook,
                                                          m_wxNoteTabWidget);
+
         wxNote::_Deleted_LoseHome_NoteFile(_CurrentPath, _Notes);
         }
 
