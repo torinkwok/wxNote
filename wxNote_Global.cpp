@@ -217,6 +217,13 @@ namespace wxNote
     void _Deleted_LoseHome_NoteFile(const QString &_CurrentPath,
                                     const QList<_NoteListItem *>& _Notes)
         {
+    #if 1  // DEBUG
+        cout << "Before: " << endl;
+        for (const _NoteListItem* _Elem : _Notes)
+            cout << _Elem->_GetNoteNameSlot() << "  |  ";
+        cout << endl << endl;
+    #endif
+
         QDir _CurrentDir(_CurrentPath);
         QStringList _NoteFileNames = _CurrentDir.entryList();
 
@@ -241,6 +248,9 @@ namespace wxNote
                                         QString _CreateDate_Str = _NoteElem->_GetCreateDate().toString(Qt::ISODate);
                                         QString _CreateTime_Str = _NoteElem->_GetCreateTime().toString("hh-mm-ss");
 
+                                        cout << "In global: " << _CreateDate_Str << endl;
+                                        cout << "In global: " << _CreateTime_Str << endl << endl;
+
                                         if (_Splited.at(1) == _NoteElem->_GetNoteNameSlot()
                                                 && bool(_Splited.at(2).toInt()) == _IsCurrentNoteLocking
                                                 && wxNote::_NoteCategories(_Splited.at(3).toInt()) == _CurrentNoteCategories
@@ -256,6 +266,13 @@ namespace wxNote
 
         if (_Iter != _NoteFileNames.end())
             _NoteFileNames.erase(_Iter, _NoteFileNames.end());
+
+    #if 1   // DEBUG
+        cout << "After: " << endl;
+        for (const QString& _Elem : _NoteFileNames)
+            cout << _Elem << "  |  ";
+        cout << endl << endl;
+    #endif
 
         /* 删除当前目录中"无家可归"的文件... */
         std::for_each(_NoteFileNames.begin(), _NoteFileNames.end(),

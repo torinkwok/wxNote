@@ -190,7 +190,7 @@ public slots:
     void _SetNoteCategories_ToDo();
     void _SetNoteCategoriesIs_Later();
 
-    void _SaveCurrentNoteSlot();
+    void _SaveCurrentNoteSlot(bool _IsRestore = false);
 
     bool _LockCurrentNoteSlot();
     void _UnlockCurrentNoteSlot();

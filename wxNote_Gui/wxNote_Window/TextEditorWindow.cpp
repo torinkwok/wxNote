@@ -160,7 +160,7 @@
         }
 
     /* _SaveCurrentNoteSlot()槽实现 */
-    void _TextEditorWindow::_SaveCurrentNoteSlot()
+    void _TextEditorWindow::_SaveCurrentNoteSlot(bool _IsRestore)
         {
         if (!mb_IsChanged)
             return;
@@ -223,7 +223,8 @@
         _SetCurrentNoteMoveEnabled(!m_NoteTitleLineEdit->text().isEmpty());
         mb_IsChanged = false;   // 保存后, 将编辑器设置为未更改
 
-        _SaveCurrentNote2File();
+        if (!_IsRestore)
+            _SaveCurrentNote2File();
         }
 
     /* _LockCurrentNotesSlot()槽实现 */

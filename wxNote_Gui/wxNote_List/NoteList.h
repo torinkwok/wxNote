@@ -75,7 +75,7 @@ public:
 
     void _AdjustNoteItemDye(const QString& _CurrentNoteBookName,
                             const QTabWidget* wxNote_TabWidget);
-    void _AdjustNoteItemDye(const QList<_NoteListItem *> _Notes);
+    void _AdjustNoteItemDye(const QList<_NoteListItem *>& _Notes);
 
 signals:
     /* 当_FinalTabWindow中已经有了该笔记的shadow, 发射该信号 */

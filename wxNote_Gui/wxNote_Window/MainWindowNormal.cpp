@@ -499,11 +499,17 @@
             _CurrentEditorWindow->_SetCreateDate(_CreateDate);
             _CurrentEditorWindow->_SetCreateTime(_CreateTime);
 
+            _CurrentNoteItem->_SetCreateDate(_CreateDate);
+            _CurrentNoteItem->_SetCreateTime(_CreateTime);
+
+            cout << "In main: " << _CurrentEditorWindow->_GetCreateDate().toString(Qt::ISODate) << endl;
+            cout << "In main: " << _CurrentEditorWindow->_GetCreateTime().toString("hh-mm-ss") << endl << endl;
+
             _CurrentEditorWindow->_GetTextEditor()->setHtml(_NoteContent);
 
             _CurrentEditorWindow->_SetNoteCategories(_NoteCategories);
             _CurrentEditorWindow->_SetNoteRating(_NoteRating);
-            _CurrentEditorWindow->_SaveCurrentNoteSlot();
+            _CurrentEditorWindow->_SaveCurrentNoteSlot(true);
             }
         }
 

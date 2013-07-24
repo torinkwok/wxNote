@@ -317,7 +317,7 @@
         }
 
     /* _AdjustNoteItemDye(QList<_NoteListItem *>)函数实现 */
-    void _NoteList::_AdjustNoteItemDye(const QList<_NoteListItem *> _Notes)
+    void _NoteList::_AdjustNoteItemDye(const QList<_NoteListItem *>& _Notes)
         {
         for (int _Index = 0; _Index < _Notes.count(); _Index++)
             {
