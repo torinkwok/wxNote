@@ -172,23 +172,25 @@ public:
 
     void _EmitPreviewText(const QString& _NoteTitle);
 
-    void _SetNoteCategories(const wxNote::_NoteCategories& _Categories);
-    void _SetNoteRating(const wxNote::_NoteRating& _Rating);
+    void _SetNoteCategories(const wxNote::_NoteCategories& _Categories,
+                            bool _IsRestore = false);
+    void _SetNoteRating(const wxNote::_NoteRating& _Rating,
+                        bool _IsRestore = false);
 
 public slots:
-    void _SetNoteRatingIs_NonRating();
-    void _SetNoteRatingIs_Excellent();
-    void _SetNoteRatingIs_Good();
-    void _SetNoteRatingIs_Average();
-    void _SetNoteRatingIs_Fair();
-    void _SetNoteRatingIs_Poor();
+    void _SetNoteRatingIs_NonRating(bool _IsRestore = false);
+    void _SetNoteRatingIs_Excellent(bool _IsRestore = false);
+    void _SetNoteRatingIs_Good(bool _IsRestore = false);
+    void _SetNoteRatingIs_Average(bool _IsRestore = false);
+    void _SetNoteRatingIs_Fair(bool _IsRestore = false);
+    void _SetNoteRatingIs_Poor(bool _IsRestore = false);
 
-    void _SetNoteCategoriesIs_NonCategories();
-    void _SetNoteCategoriesIs_Important();
-    void _SetNoteCategoriesIs_Work();
-    void _SetNoteCategoriesIs_Personal();
-    void _SetNoteCategories_ToDo();
-    void _SetNoteCategoriesIs_Later();
+    void _SetNoteCategoriesIs_NonCategories(bool _IsRestore = false);
+    void _SetNoteCategoriesIs_Important(bool _IsRestore = false);
+    void _SetNoteCategoriesIs_Work(bool _IsRestore = false);
+    void _SetNoteCategoriesIs_Personal(bool _IsRestore = false);
+    void _SetNoteCategories_ToDo(bool _IsRestore = false);
+    void _SetNoteCategoriesIs_Later(bool _IsRestore = false);
 
     void _SaveCurrentNoteSlot(bool _IsRestore = false);
 

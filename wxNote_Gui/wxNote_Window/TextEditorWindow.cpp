@@ -291,64 +291,66 @@
 
     /* _SetNoteRating()函数实现 */
     void _TextEditorWindow
-        ::_SetNoteRating(const wxNote::_NoteRating &_Rating)
+        ::_SetNoteRating(const wxNote::_NoteRating &_Rating,
+                         bool _IsRestore)
         {
         switch (_Rating)
             {
         case wxNote::_Excellent:
-            _SetNoteRatingIs_Excellent();
+            _SetNoteRatingIs_Excellent(_IsRestore);
             break;
 
         case wxNote::_Good:
-            _SetNoteRatingIs_Good();
+            _SetNoteRatingIs_Good(_IsRestore);
             break;
 
         case wxNote::_Average:
-            _SetNoteRatingIs_Average();
+            _SetNoteRatingIs_Average(_IsRestore);
             break;
 
         case wxNote::_Fair:
-            _SetNoteRatingIs_Fair();
+            _SetNoteRatingIs_Fair(_IsRestore);
             break;
 
         case wxNote::_Poor:
-            _SetNoteRatingIs_Poor();
+            _SetNoteRatingIs_Poor(_IsRestore);
             break;
 
         default:
-            _SetNoteRatingIs_NonRating();
+            _SetNoteRatingIs_NonRating(_IsRestore);
             }
         }
 
 
     /* _SetNoteCategories()函数实现 */
     void _TextEditorWindow
-        ::_SetNoteCategories(const wxNote::_NoteCategories &_Categories)
+        ::_SetNoteCategories(const wxNote::_NoteCategories &_Categories,
+                             bool _IsRestore)
         {
         switch (_Categories)
             {
         case wxNote::_Important:
-            _SetNoteCategoriesIs_Important();
+            _SetNoteCategoriesIs_Important(_IsRestore);
             break;
 
         case wxNote::_Work:
-            _SetNoteCategoriesIs_Work();
+            _SetNoteCategoriesIs_Work(_IsRestore);
             break;
 
         case wxNote::_Personal:
-            _SetNoteCategoriesIs_Personal();
+            _SetNoteCategoriesIs_Personal(_IsRestore);
             break;
 
         case wxNote::_ToDo:
-            _SetNoteCategories_ToDo();
+            _SetNoteCategories_ToDo(_IsRestore);
             break;
 
         case wxNote::_Later:
-            _SetNoteCategoriesIs_Later();
+            _SetNoteCategoriesIs_Later(_IsRestore);
             break;
 
         default:
-            _SetNoteCategoriesIs_NonCategories();
+            _SetNoteCategoriesIs_NonCategories(_IsRestore);
             }
         }
 
@@ -997,7 +999,7 @@
         }
 
     /* _SetNoteRatingIs_NonRating()槽实现 */
-    void _TextEditorWindow::_SetNoteRatingIs_NonRating()
+    void _TextEditorWindow::_SetNoteRatingIs_NonRating(bool _IsRestore)
         {
         if (!m_TextEditor->toPlainText().isEmpty())
             {
@@ -1008,12 +1010,13 @@
 
             m_Rating_Current = QString();
 
-            _SaveCurrentNote2File();
+            if (!_IsRestore)
+                _SaveCurrentNote2File();
             }
         }
 
     /* _SetNoteRatingIs_Excellent()槽实现 */
-    void _TextEditorWindow::_SetNoteRatingIs_Excellent()
+    void _TextEditorWindow::_SetNoteRatingIs_Excellent(bool _IsRestore)
         {
         if (!m_TextEditor->toPlainText().isEmpty())
             {
@@ -1024,12 +1027,13 @@
 
             m_Rating_Current = wxNote::g_ExcellentName;
 
-            _SaveCurrentNote2File();
+            if (!_IsRestore)
+                _SaveCurrentNote2File();
             }
         }
 
     /* _SetNoteRatingIs_Good()槽实现 */
-    void _TextEditorWindow::_SetNoteRatingIs_Good()
+    void _TextEditorWindow::_SetNoteRatingIs_Good(bool _IsRestore)
         {
         if (!m_TextEditor->toPlainText().isEmpty())
             {
@@ -1040,12 +1044,13 @@
 
             m_Rating_Current = wxNote::g_GoodName;
 
-            _SaveCurrentNote2File();
+            if (!_IsRestore)
+                _SaveCurrentNote2File();
             }
         }
 
     /* _SetNoteRatingIs_Average()槽实现 */
-    void _TextEditorWindow::_SetNoteRatingIs_Average()
+    void _TextEditorWindow::_SetNoteRatingIs_Average(bool _IsRestore)
         {
         if (!m_TextEditor->toPlainText().isEmpty())
             {
@@ -1056,12 +1061,13 @@
 
             m_Rating_Current = wxNote::g_AverageName;
 
-            _SaveCurrentNote2File();
+            if (!_IsRestore)
+                _SaveCurrentNote2File();
             }
         }
 
     /* _SetNoteRatingIs_Fair()槽实现 */
-    void _TextEditorWindow::_SetNoteRatingIs_Fair()
+    void _TextEditorWindow::_SetNoteRatingIs_Fair(bool _IsRestore)
         {
         if (!m_TextEditor->toPlainText().isEmpty())
             {
@@ -1072,12 +1078,13 @@
 
             m_Rating_Current = wxNote::g_FairName;
 
-            _SaveCurrentNote2File();
+            if (!_IsRestore)
+                _SaveCurrentNote2File();
             }
         }
 
     /* _SetNoteRatingIs_Poor()槽实现 */
-    void _TextEditorWindow::_SetNoteRatingIs_Poor()
+    void _TextEditorWindow::_SetNoteRatingIs_Poor(bool _IsRestore)
         {
         if (!m_TextEditor->toPlainText().isEmpty())
             {
@@ -1088,12 +1095,13 @@
 
             m_Rating_Current = wxNote::g_PoorName;
 
-            _SaveCurrentNote2File();
+            if (!_IsRestore)
+                _SaveCurrentNote2File();
             }
         }
 
     /* _SetNoteCategoriesIs_NonCategories()槽实现 */
-    void _TextEditorWindow::_SetNoteCategoriesIs_NonCategories()
+    void _TextEditorWindow::_SetNoteCategoriesIs_NonCategories(bool _IsRestore)
         {
         if (!m_TextEditor->toPlainText().isEmpty())
             {
@@ -1104,12 +1112,13 @@
 
             m_Categories_Current = QString();
 
-            _SaveCurrentNote2File();
+            if (!_IsRestore)
+                _SaveCurrentNote2File();
             }
         }
 
     /* _SetNoteCategoriesIs_Important()槽实现 */
-    void _TextEditorWindow::_SetNoteCategoriesIs_Important()
+    void _TextEditorWindow::_SetNoteCategoriesIs_Important(bool _IsRestore)
         {
         if (!m_TextEditor->toPlainText().isEmpty())
             {
@@ -1120,12 +1129,13 @@
 
             m_Categories_Current = wxNote::g_ImportantName;
 
-            _SaveCurrentNote2File();
+            if (!_IsRestore)
+                _SaveCurrentNote2File();
             }
         }
 
     /* _SetNoteCategoriesIs_Work()槽实现 */
-    void _TextEditorWindow::_SetNoteCategoriesIs_Work()
+    void _TextEditorWindow::_SetNoteCategoriesIs_Work(bool _IsRestore)
         {
         if (!m_TextEditor->toPlainText().isEmpty())
             {
@@ -1136,12 +1146,13 @@
 
             m_Categories_Current = wxNote::g_WorkName;
 
-            _SaveCurrentNote2File();
+            if (!_IsRestore)
+                _SaveCurrentNote2File();
             }
         }
 
     /* _SetNoteCategoriesIs_Personal()槽实现 */
-    void _TextEditorWindow::_SetNoteCategoriesIs_Personal()
+    void _TextEditorWindow::_SetNoteCategoriesIs_Personal(bool _IsRestore)
         {
         if (!m_TextEditor->toPlainText().isEmpty())
             {
@@ -1152,12 +1163,13 @@
 
             m_Categories_Current = wxNote::g_PersonalName;
 
-            _SaveCurrentNote2File();
+            if (!_IsRestore)
+                _SaveCurrentNote2File();
             }
         }
 
     /* _SetNoteCategoriesIs_ToDo()槽实现 */
-    void _TextEditorWindow::_SetNoteCategories_ToDo()
+    void _TextEditorWindow::_SetNoteCategories_ToDo(bool _IsRestore)
         {
         if (!m_TextEditor->toPlainText().isEmpty())
             {
@@ -1168,12 +1180,13 @@
 
             m_Categories_Current = wxNote::g_ToDoName;
 
-            _SaveCurrentNote2File();
+            if (!_IsRestore)
+                _SaveCurrentNote2File();
             }
         }
 
     /* _SetNoteCategoriesIs_Later()槽实现 */
-    void _TextEditorWindow::_SetNoteCategoriesIs_Later()
+    void _TextEditorWindow::_SetNoteCategoriesIs_Later(bool _IsRestore)
         {
         if (!m_TextEditor->toPlainText().isEmpty())
             {
@@ -1184,7 +1197,8 @@
 
             m_Categories_Current = wxNote::g_LaterName;
 
-            _SaveCurrentNote2File();
+            if (!_IsRestore)
+                _SaveCurrentNote2File();
             }
         }
 
