@@ -2802,11 +2802,11 @@
                                                               : '/' + _NoteBookName);
         return _CurrentPath;
         }
-#if 0
+#if 1
     void _MainWindowNormal::_SynchronousSlot()
         {
-        m_NoteList->_GetCurrentItem()->_GetBindTextEW()->_SetNoteCategories(wxNote::_Work);
-        m_NoteList->_GetCurrentItem()->_GetBindTextEW()->_SetNoteRating(wxNote::_Average);
+        cout << wxNote::_GetMatchedNoteFile_byNoteItem(m_NoteList->_GetCurrentItem())
+             << endl;
         }
 #endif
 
