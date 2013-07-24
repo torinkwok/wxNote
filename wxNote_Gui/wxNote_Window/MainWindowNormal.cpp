@@ -2802,7 +2802,7 @@
                                                               : '/' + _NoteBookName);
         return _CurrentPath;
         }
-#if 1
+#if 0
     void _MainWindowNormal::_SynchronousSlot()
         {
         cout << wxNote::_GetMatchedNoteFile_byNoteItem(m_NoteList->_GetCurrentItem())

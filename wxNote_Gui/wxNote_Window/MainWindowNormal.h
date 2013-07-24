@@ -323,7 +323,7 @@ protected:
     _wxNote_ToolButton* m_TrashToolButton;
     _wxNote_ToolButton* m_OneKeyLockToolButton;
 
-#if 1   // DEBUG
+#if 0   // DEBUG
     void _SynchronousSlot();
 #endif
     };
