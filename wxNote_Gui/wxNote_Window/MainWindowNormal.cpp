@@ -494,7 +494,7 @@
 
             _CurrentEditorWindow->_GetTitleLineEdit()->setText(_CurrentNoteTitle);
             if (_IsLocking)
-                _CurrentEditorWindow->_LockCurrentNoteSlot();
+                _CurrentEditorWindow->_LockCurrentNoteSlot(true);
 
             _CurrentEditorWindow->_SetCreateDate(_CreateDate);
             _CurrentEditorWindow->_SetCreateTime(_CreateTime);

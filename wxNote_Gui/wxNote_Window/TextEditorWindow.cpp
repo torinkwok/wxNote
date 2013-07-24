@@ -228,7 +228,7 @@
         }
 
     /* _LockCurrentNotesSlot()槽实现 */
-    bool _TextEditorWindow::_LockCurrentNoteSlot()
+    bool _TextEditorWindow::_LockCurrentNoteSlot(bool _IsRestore)
         {
         using namespace wxNote;
 
@@ -246,7 +246,9 @@
                 _SetEditorNotEnabled();
                 _EmitPreviewText(m_NoteTitleLineEdit->text());
 
-                _SaveCurrentNote2File();
+                if (!_IsRestore)
+                    _SaveCurrentNote2File();
+
                 return true;
                 }
             else
@@ -257,7 +259,9 @@
             _SetEditorNotEnabled();
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
-            _SaveCurrentNote2File();
+            if (!_IsRestore)
+                _SaveCurrentNote2File();
+
             return true;
             }
         }

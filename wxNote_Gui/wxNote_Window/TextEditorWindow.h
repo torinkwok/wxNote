@@ -194,7 +194,7 @@ public slots:
 
     void _SaveCurrentNoteSlot(bool _IsRestore = false);
 
-    bool _LockCurrentNoteSlot();
+    bool _LockCurrentNoteSlot(bool _IsRestore = false);
     void _UnlockCurrentNoteSlot();
 
 signals:
