@@ -181,8 +181,9 @@ namespace wxNote
             QString _LocalFilePath =
                     wxNote::g_Settings.value("LocalFilePath").toString();
 
-            wxNote::g_LocalFilePath = _LocalFilePath.isEmpty() ? QDir::homePath() + "/wxNote_USER"
-                                                               : _LocalFilePath;
+            wxNote::g_LocalFilePath = _LocalFilePath.isEmpty()
+                                                        ? QDir::homePath() + "/wxNote_USER"
+                                                        : _LocalFilePath;
             QDir _Dir(wxNote::g_LocalFilePath);
 
             if (!_Dir.exists())
