@@ -208,6 +208,8 @@ protected:
 
     bool _IsCurrentNoteListAllHidden();
 
+    void _ClearEmptyNote(const QString& _NoteBookName);
+
     bool _EraseNoteItemFromDeletedList(const QListWidgetItem* _DeletedItem);
     void _EraseSpecifiedEditorWindowFromGlobalList(QListWidgetItem* _NoteItem);
     void _EraseCurrentEditorWindowFromGlobalList();

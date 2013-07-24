@@ -825,6 +825,52 @@
         return b_IsAllHidden;
         }
 
+    /* _ClearEmptyNote()函数实现 */
+    void _MainWindowNormal::_ClearEmptyNote(const QString &_NoteBookName)
+        {
+        for (int _Index = 0; _Index < m_NoteList->count(); _Index++)
+            {
+            QString _CurrentNoteTitle =
+                    m_NoteList->_GetSpecifiedItemTitle(_Index);
+
+            if (_CurrentNoteTitle == wxNote::g_NonTitleNoteName)
+                {
+                _NoteListItem* _CurrentNoteItem = m_NoteList->_Item(_Index);
+
+                /* 如果该笔记存在shadow窗口, 那么再删除它的同时将它的shadow窗口关闭 */
+                emit _CloseCurrentNoteShadowWindowSignal(_CurrentNoteItem->_GetBindTextEW());
+
+                m_TextEditorStackedLayout->setCurrentIndex(_Index);
+
+                QWidget* _CurrentTextEditorWindow =
+                                m_TextEditorStackedLayout->currentWidget();
+
+                _EraseNoteItemFromDeletedList(_CurrentNoteItem);
+
+                _EraseSpecifiedEditorWindowFromGlobalList(_CurrentNoteItem);
+
+                delete _CurrentNoteItem;
+                delete _CurrentTextEditorWindow;
+
+                _CurrentNoteItem = nullptr;
+                _CurrentTextEditorWindow = nullptr;
+
+                break;
+                }
+            }
+
+        _RestoreLastPitchOnItem_NoteBookTree(_NoteBookName);
+
+        QListWidgetItem* _NewCurrentItem = m_NoteList->currentItem();
+
+        if (_NewCurrentItem)
+            {
+            int _NewCurrentIndex = m_NoteList->_GetIndexFromItem(_NewCurrentItem).row();
+
+            m_TextEditorStackedLayout->setCurrentIndex(_NewCurrentIndex);
+            }
+        }
+
     /* _EraseDeletedNoteItem()函数实现 */
     bool _MainWindowNormal
         ::_EraseNoteItemFromDeletedList(const QListWidgetItem *_DeletedItem)
@@ -1195,46 +1241,7 @@
         m_NoteList->_AdjustNoteItemDye(_CurrentNoteBookName,
                                        m_wxNoteTabWidget);
 
-        /////////////////////////////////////////////////////////////////////
-        /// 如果笔记列表中存在"无标题笔记", 那么在笔记本切换时会将其删除
-        ///
-        for (int _Index = 0; _Index < m_NoteList->count(); _Index++)
-            {
-            QString _CurrentNoteTitle =
-                    m_NoteList->_GetSpecifiedItemTitle(_Index);
-
-            if (_CurrentNoteTitle == wxNote::g_NonTitleNoteName)
-                {
-                _NoteListItem* _CurrentNoteItem = m_NoteList->_Item(_Index);
-
-                /* 如果该笔记存在shadow窗口, 那么再删除它的同时将它的shadow窗口关闭 */
-                emit _CloseCurrentNoteShadowWindowSignal(_CurrentNoteItem->_GetBindTextEW());
-
-                m_TextEditorStackedLayout->setCurrentIndex(_Index);
-
-                QWidget* _CurrentTextEditorWindow =
-                                m_TextEditorStackedLayout->currentWidget();
-
-                _EraseNoteItemFromDeletedList(_CurrentNoteItem);
-
-                _EraseSpecifiedEditorWindowFromGlobalList(_CurrentNoteItem);
-
-                delete _CurrentNoteItem;
-                delete _CurrentTextEditorWindow;
-
-                _CurrentNoteItem = nullptr;
-                _CurrentTextEditorWindow = nullptr;
-                }
-
-            _RestoreLastPitchOnItem_NoteBookTree(_CurrentNoteBookName);
-
-            QListWidgetItem* _NewCurrentItem = m_NoteList->currentItem();
-            int _NewCurrentIndex = m_NoteList->_GetIndexFromItem(_NewCurrentItem).row();
-
-            m_TextEditorStackedLayout->setCurrentIndex(_NewCurrentIndex);
-            }
-
-        //////////////////////////////////////////////////////////////////////
+        _ClearEmptyNote(_CurrentNoteBookName);
 
         /* 当用户选中的是"全部笔记"或"笔记本"时, 则取消对所有笔记项的隐藏 */
         if (_CurrentNoteBookName == wxNote::g_AllNotesName || _CurrentNoteBookName == wxNote::g_NoteBooksName)
