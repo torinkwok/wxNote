@@ -872,6 +872,10 @@
 
             m_TextEditorStackedLayout->setCurrentIndex(_NewCurrentIndex);
             }
+
+        _SetDeleteNoteEnabled();
+        _SetNoteEditEnabled();
+        _SetOneKeyLockEnabled();
         }
 
     /* _EraseDeletedNoteItem()函数实现 */
@@ -1641,7 +1645,7 @@
                 m_NoteList, SLOT(_SetCurrentNoteItem_NoteName(QString)));
 
         connect(_EditWindow, SIGNAL(_BeSavedSignals()),
-                this, SLOT(_SaveCurrentNoteContextSlot()));
+                this, SLOT(_SaveCurrentNoteContentSlot()));
 
         connect(_EditWindow, SIGNAL(_MoveCurrentNote2TrashSignal()),
                 this, SLOT(_MoveNote2TrashSlot()));
@@ -1770,7 +1774,7 @@
         if (_CurrentNoteItem)
             {
             /* 首先将该笔记移到trash文件夹中 */
-            _MoveNoteFile2OtherOne(_CurrentNoteBookName
+            _MoveNoteFile2OtherOne(_CurrentNoteItem->_GetParentNoteBookName()
                                    , wxNote::_GetMatchedNoteFile_byNoteItem(_CurrentNoteItem)
                                    , wxNote::g_TrashName);
 
@@ -1995,7 +1999,7 @@
                 _TextEditorWindow* _CurrentEditorWindow =
                         wxNote::_GetEWFromGlobalList_BySpecifiedItem(_CurrentNoteItem);
 
-                _MoveNoteFile2OtherOne(_CurrentNoteBookName
+                _MoveNoteFile2OtherOne(_CurrentNoteItem->_GetParentNoteBookName()
                                        , wxNote::_GetMatchedNoteFile_byNoteItem(_CurrentNoteItem)
                                        , _NoteBookName);
 
@@ -2263,8 +2267,8 @@
         m_NoteStatus = _NormalStatus;
         }
 
-    /* _SaveCurrentNoteContextSlot()槽实现 */
-    void _MainWindowNormal::_SaveCurrentNoteContextSlot()
+    /* _SaveCurrentNoteContentSlot()槽实现 */
+    void _MainWindowNormal::_SaveCurrentNoteContentSlot()
         {
         using namespace wxNote;
 

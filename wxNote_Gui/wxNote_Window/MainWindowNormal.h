@@ -181,7 +181,7 @@ protected slots:
     void _BeginFilterSlot(QString _SearchText);
     void _StopFilterSlot();
 
-    void _SaveCurrentNoteContextSlot();
+    void _SaveCurrentNoteContentSlot();
 
     void _RecordLastPitchOnNoteItemSlot_NoteBookTree(int _Row);
     void _RecordLastPitchOnNoteItemSlot_Categories(int _Row);
