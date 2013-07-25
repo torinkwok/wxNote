@@ -1014,6 +1014,8 @@
 
             m_Rating_Current = QString();
 
+            m_NonRatingAction->setChecked(true);
+
             if (!_IsRestore)
                 _SaveCurrentNote2File();
             }
@@ -1030,6 +1032,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Rating_Current = wxNote::g_ExcellentName;
+
+            m_ExcellentAction->setChecked(true);
 
             if (!_IsRestore)
                 _SaveCurrentNote2File();
@@ -1048,6 +1052,8 @@
 
             m_Rating_Current = wxNote::g_GoodName;
 
+            m_GoodAction->setChecked(true);
+
             if (!_IsRestore)
                 _SaveCurrentNote2File();
             }
@@ -1064,6 +1070,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Rating_Current = wxNote::g_AverageName;
+
+            m_AverageAction->setChecked(true);
 
             if (!_IsRestore)
                 _SaveCurrentNote2File();
@@ -1082,6 +1090,8 @@
 
             m_Rating_Current = wxNote::g_FairName;
 
+            m_FairAction->setChecked(true);
+
             if (!_IsRestore)
                 _SaveCurrentNote2File();
             }
@@ -1098,6 +1108,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Rating_Current = wxNote::g_PoorName;
+
+            m_PoorAction->setChecked(true);
 
             if (!_IsRestore)
                 _SaveCurrentNote2File();
@@ -1116,6 +1128,8 @@
 
             m_Categories_Current = QString();
 
+            m_NonCategoriesAction->setChecked(true);
+
             if (!_IsRestore)
                 _SaveCurrentNote2File();
             }
@@ -1132,6 +1146,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Categories_Current = wxNote::g_ImportantName;
+
+            m_ImportantAction->setChecked(true);
 
             if (!_IsRestore)
                 _SaveCurrentNote2File();
@@ -1150,6 +1166,8 @@
 
             m_Categories_Current = wxNote::g_WorkName;
 
+            m_WorkAction->setChecked(true);
+
             if (!_IsRestore)
                 _SaveCurrentNote2File();
             }
@@ -1166,6 +1184,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Categories_Current = wxNote::g_PersonalName;
+
+            m_PersonalAction->setChecked(true);
 
             if (!_IsRestore)
                 _SaveCurrentNote2File();
@@ -1184,6 +1204,8 @@
 
             m_Categories_Current = wxNote::g_ToDoName;
 
+            m_ToDoAction->setChecked(true);
+
             if (!_IsRestore)
                 _SaveCurrentNote2File();
             }
@@ -1200,6 +1222,8 @@
             _EmitPreviewText(m_NoteTitleLineEdit->text());
 
             m_Categories_Current = wxNote::g_LaterName;
+
+            m_LaterAction->setChecked(true);
 
             if (!_IsRestore)
                 _SaveCurrentNote2File();
