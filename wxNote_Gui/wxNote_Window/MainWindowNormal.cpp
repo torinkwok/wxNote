@@ -423,6 +423,14 @@
         QDir _MainDir(g_LocalFilePath);
         QStringList _DirOrFileNames = _MainDir.entryList();
 
+        _SortNoteNameByCreateTime(_DirOrFileNames);
+
+    #if 0   // DEBUG
+        for (const QString& _Elem : _DirOrFileNames)
+            cout << _Elem << "  |  ";
+        cout << endl << endl;
+    #endif
+
         std::for_each(_DirOrFileNames.begin() + 2, _DirOrFileNames.end(),
                       [this](const QString& _Elem)
                         {
@@ -479,17 +487,10 @@
             wxNote::_NoteRating _NoteRating =
                     wxNote::_NoteRating(_Splited.at(4).toInt());
 
-            QStringList _CreateDateSplited = _Splited.at(5).split('-');
-            int _Year = _CreateDateSplited.at(0).toInt();
-            int _Month = _CreateDateSplited.at(1).toInt();
-            int _Day = _CreateDateSplited.at(2).toInt();
-            QDate _CreateDate(_Year, _Month, _Day);
-
-            QStringList _CreateTimeSplited = _Splited.at(6).split('-');
-            int _Hour = _CreateTimeSplited.at(0).toInt();
-            int _Minute = _CreateTimeSplited.at(1).toInt();
-            int _Second = _CreateTimeSplited.at(2).toInt();
-            QTime _CreateTime(_Hour, _Minute, _Second);
+            QPair<QDate, QTime> _CreateTimePair =
+                    _ExtractDateAndTimeFromNoteFileName(_NoteFileName);
+            QDate _CreateDate = _CreateTimePair.first;
+            QTime _CreateTime = _CreateTimePair.second;
 
             QPair<_NoteListItem *, _TextEditorWindow *> _RetPair = _NewNoteSlot();
 
@@ -518,6 +519,57 @@
             _CurrentEditorWindow->_SetNoteRating(_NoteRating, true);
             _CurrentEditorWindow->_SaveCurrentNoteSlot(true);
             }
+        }
+
+    /* _ExtractDateAndTimeFromNoteFileName()函数实现 */
+    QPair<QDate, QTime> _MainWindowNormal
+        ::_ExtractDateAndTimeFromNoteFileName(const QString &_NoteFileName)
+        {
+        QDate _CreateDate;
+        QTime _CreateTime;
+
+        if (_NoteFileName.contains(wxNote::g_NoteNameSplitSymbol))
+            {
+            QStringList _Splited = _NoteFileName.split(wxNote::g_NoteNameSplitSymbol);
+
+            QStringList _CreateDateSplited = _Splited.at(5).split('-');
+            int _Year = _CreateDateSplited.at(0).toInt();
+            int _Month = _CreateDateSplited.at(1).toInt();
+            int _Day = _CreateDateSplited.at(2).toInt();
+            _CreateDate = QDate(_Year, _Month, _Day);
+
+            QStringList _CreateTimeSplited = _Splited.at(6).split('-');
+            int _Hour = _CreateTimeSplited.at(0).toInt();
+            int _Minute = _CreateTimeSplited.at(1).toInt();
+            int _Second = _CreateTimeSplited.at(2).toInt();
+            _CreateTime = QTime(_Hour, _Minute, _Second);
+            }
+
+        return qMakePair(_CreateDate, _CreateTime);
+        }
+
+    /* _SortNoteNameByCreateTime()函数实现 */
+    void _MainWindowNormal::_SortNoteNameByCreateTime(QStringList &_Names)
+        {
+        std::sort(_Names.begin(), _Names.end(),
+                  [this](const QString& _Lhs, const QString& _Rhs)
+                    {
+                    if (_Lhs.contains(wxNote::g_NoteNameSplitSymbol)
+                            && _Rhs.contains(wxNote::g_NoteNameSplitSymbol))
+                        {
+                        QPair<QDate, QTime> _CreateTimePair_Lhs =
+                                _ExtractDateAndTimeFromNoteFileName(_Lhs);
+                        QPair<QDate, QTime> _CreateTimePair_Rhs =
+                                _ExtractDateAndTimeFromNoteFileName(_Rhs);
+
+                        if (_CreateTimePair_Lhs.first != _CreateTimePair_Rhs.first)
+                            return _CreateTimePair_Lhs.first < _CreateTimePair_Rhs.first;
+                        else
+                            return _CreateTimePair_Rhs.second < _CreateTimePair_Rhs.second;
+                        }
+
+                    return false;
+                    });
         }
 
     /* _CreateActionsAndSubMenu()函数重写 */
@@ -2821,11 +2873,16 @@
                                                               : '/' + _NoteBookName);
         return _CurrentPath;
         }
-#if 0
+#if 1
     void _MainWindowNormal::_SynchronousSlot()
         {
-        cout << wxNote::_GetMatchedNoteFile_byNoteItem(m_NoteList->_GetCurrentItem())
-             << endl;
+        QString _NoteFileName = wxNote::_GetMatchedNoteFile_byNoteItem(m_NoteList->_GetCurrentItem());
+
+        QPair<QDate, QTime> _TestPair =
+                _ExtractDateAndTimeFromNoteFileName(_NoteFileName);
+
+        cout << _TestPair.first.toString(Qt::ISODate) << "    "
+             << _TestPair.second.toString("hh-mm-ss") << endl << endl;;
         }
 #endif
 

@@ -193,6 +193,10 @@ protected:
     void _RestoreSpecifiedNoteFile(const QString& _NoteBookPath,
                                    const QString& _NoteFileName);
 
+    QPair<QDate, QTime> _ExtractDateAndTimeFromNoteFileName(const QString& _NoteFileName);
+
+    void _SortNoteNameByCreateTime(QStringList& _Names);
+
     void _CreateActionsAndSubMenu();
     void _CreateMainWinMenus();
     void _CreateMainWinToolBar();
@@ -323,7 +327,7 @@ protected:
     _wxNote_ToolButton* m_TrashToolButton;
     _wxNote_ToolButton* m_OneKeyLockToolButton;
 
-#if 0   // DEBUG
+#if 1   // DEBUG
     void _SynchronousSlot();
 #endif
     };

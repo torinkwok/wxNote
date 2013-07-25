@@ -68,7 +68,7 @@
 
         m_WaringLabel = new QLabel(tr("<img src=\":/wxNote_Icons/wrongful.png\">"
                                       "\t笔记本名不能包含下列任何字符："
-                                      "<p>如 \\ / : * ? &quot; &lt; &gt; |"));
+                                      "<p>如 \\ / : * ? &quot; &lt; &gt; | ~"));
         m_WaringLabel->setHidden(true);
 
         m_ButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok
@@ -119,7 +119,7 @@
                     || _CurrentText.contains(':') || _CurrentText.contains('*')
                     || _CurrentText.contains('?') || _CurrentText.contains('"')
                     || _CurrentText.contains('<') || _CurrentText.contains('>')
-                    || _CurrentText.contains('|'));
+                    || _CurrentText.contains('|') || _CurrentText.contains('~'));
 
         m_WaringLabel->setHidden(!_ContainsWrongful);
 
