@@ -196,7 +196,7 @@
                 m_NoteList->_GetNotesInSpecifiedNoteBook(_NoteBookName,
                                                          m_wxNoteTabWidget).at(0);
 
-        return _FirstNoteItem ? _FirstNoteItem : nullptr;
+        return _FirstNoteItem;
         }
 
     /* _OptionsSlot()槽重写 */
@@ -444,6 +444,13 @@
                         else    /* 否则就是一个笔记名称(全部笔记)... */
                             _RestoreSpecifiedNoteFile(g_LocalFilePath, _Elem);
                         });
+
+        /* 选中当前笔记本中的第一个笔记项 */
+        _NoteListItem* _FirstNoteInCurrentNoteBook =
+                _GetFirstNoteInSpecifiedNoteBook(m_NoteBookTree->currentItem()->text(0));
+
+        if (_FirstNoteInCurrentNoteBook)
+            m_NoteList->setCurrentItem(_FirstNoteInCurrentNoteBook);
         }
 
     /* _RestoreSpecifiedNoteFile()函数实现 */
