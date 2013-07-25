@@ -423,11 +423,18 @@
         QDir _MainDir(g_LocalFilePath);
         QStringList _DirOrFileNames = _MainDir.entryList();
 
+    #if 0   // DEBUG
+        cout << "Before: " << endl;
+        for (const QString _Elem : _DirOrFileNames)
+            cout << _Elem << endl;
+        cout << endl << endl;
+    #endif
         _SortNoteNameByCreateTime(_DirOrFileNames);
 
     #if 0   // DEBUG
-        for (const QString& _Elem : _DirOrFileNames)
-            cout << _Elem << "  |  ";
+        cout << "Before: " << endl;
+        for (const QString _Elem : _DirOrFileNames)
+            cout << _Elem << endl;
         cout << endl << endl;
     #endif
 
@@ -551,6 +558,11 @@
     /* _SortNoteNameByCreateTime()函数实现 */
     void _MainWindowNormal::_SortNoteNameByCreateTime(QStringList &_Names)
         {
+    #if 0   // DEBUG
+        for (const QString& _Elem : _Names)
+            cout << _Elem << "  |  ";
+        cout << endl << endl;
+    #endif
         std::sort(_Names.begin(), _Names.end(),
                   [this](const QString& _Lhs, const QString& _Rhs)
                     {
