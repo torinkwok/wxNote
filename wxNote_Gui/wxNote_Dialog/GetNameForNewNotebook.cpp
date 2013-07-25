@@ -66,6 +66,11 @@
         connect(m_BackSpaceToolButton, SIGNAL(clicked()),
                 this, SLOT(_LineEditBackSpace()));
 
+        m_WaringLabel = new QLabel(tr("<img src=\":/wxNote_Icons/wrongful.png\">"
+                                      "\t笔记本名不能包含下列任何字符："
+                                      "<p>如 \\ / : * ? &quot; &lt; &gt; |"));
+        m_WaringLabel->setHidden(true);
+
         m_ButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok
                                            | QDialogButtonBox::Cancel);
 
@@ -85,11 +90,12 @@
         QVBoxLayout* _MainLayout = new QVBoxLayout;
         _MainLayout->addWidget(m_NameLabel);
         _MainLayout->addWidget(m_NameLineEdit);
+        _MainLayout->addWidget(m_WaringLabel);
         _MainLayout->addStretch();
         _MainLayout->addWidget(m_ButtonBox);
 
         setLayout(_MainLayout);
-        setFixedSize(250, sizeHint().height() + 10);
+        setFixedSize(250, sizeHint().height() + 70);
         setWindowTitle(tr("新建笔记本"));
         setFont(wxNote::g_StandardFont);
         setWindowIcon(QIcon(":/wxNote_Icons/wxNoteicon.png"));
@@ -108,8 +114,17 @@
     void _GetNameForNewNoteBookDialog
         ::_LineEditTextChanged(const QString &_CurrentText)
         {
-        m_ButtonBox->button(QDialogButtonBox::Ok)->
-                setEnabled(!_CurrentText.isEmpty());
+        bool _ContainsWrongful(
+                _CurrentText.contains('\\') || _CurrentText.contains('/')
+                    || _CurrentText.contains(':') || _CurrentText.contains('*')
+                    || _CurrentText.contains('?') || _CurrentText.contains('"')
+                    || _CurrentText.contains('<') || _CurrentText.contains('>')
+                    || _CurrentText.contains('|'));
+
+        m_WaringLabel->setHidden(!_ContainsWrongful);
+
+        m_ButtonBox->button(QDialogButtonBox::Ok)
+                        ->setEnabled(!_CurrentText.isEmpty() && !_ContainsWrongful);
         }
 
     /* _LineEditBackSpace()槽实现 */

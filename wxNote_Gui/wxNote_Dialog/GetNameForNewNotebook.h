@@ -59,6 +59,8 @@ protected:
 
     _NestingButton* m_BackSpaceToolButton;
 
+    QLabel*      m_WaringLabel;
+
     QDialogButtonBox* m_ButtonBox;
     };
 

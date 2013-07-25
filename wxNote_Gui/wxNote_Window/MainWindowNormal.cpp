@@ -2486,6 +2486,12 @@
     _NoteListItem* _MainWindowNormal
         ::_GetLastPitchOnItem_inNoteBookTree(const QString &_NoteBookName)
         {
+        QList<_NoteListItem *> _Notes =
+                m_NoteList->_GetNotesInSpecifiedNoteBook(_NoteBookName,
+                                                         m_wxNoteTabWidget);
+        if (_Notes.isEmpty())
+            return nullptr;
+
         auto _Iter =
                 std::find_if(m_LastPitchOnItemList_NoteBookTree.begin(), m_LastPitchOnItemList_NoteBookTree.end(),
                              [&_NoteBookName](const QPair<QString, _NoteListItem*>& _Elem)

@@ -64,5 +64,6 @@
         <file>wxNote_Icons/work-mini.png</file>
         <file>wxNote_Icons/wxNote.ico</file>
         <file>wxNote_Icons/wxNoteicon.png</file>
+        <file>wxNote_Icons/wrongful.png</file>
     </qresource>
 </RCC>
