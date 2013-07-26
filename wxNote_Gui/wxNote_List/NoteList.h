@@ -50,7 +50,8 @@ class _NoteList : public QListWidget
 public:
     _NoteList(QWidget* _Parent = nullptr);
 
-    void _AddItem(const QPair<_NoteListItem*, QString> _ItemGroup);
+    void _AddItem(const QPair<_NoteListItem*, QString> _ItemGroup,
+                  bool _IsRestore = false);
 
     int _HiddenCount();
 

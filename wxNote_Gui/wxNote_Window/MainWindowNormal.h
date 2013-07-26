@@ -164,7 +164,8 @@ protected slots:
     void _SetAcceptRichTextSlot(bool _IsOK);
 
     /* 针对单个笔记操作的slot */
-    QPair<_NoteListItem*, _TextEditorWindow *> _NewNoteSlot();
+    QPair<_NoteListItem*, _TextEditorWindow *>
+                    _NewNoteSlot(bool _IsRestore = false);
     void _MoveNote2TrashSlot();
     void _ThoroughDeleteCurrentNoteSlot();
     void _RestoreNoteSlot();

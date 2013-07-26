@@ -58,12 +58,16 @@
         {;}
 
     /* _AddItem()函数实现 */
-    void _NoteList::_AddItem(const QPair<_NoteListItem *, QString> _ItemGroup)
+    void _NoteList::_AddItem(const QPair<_NoteListItem *, QString> _ItemGroup,
+                             bool _IsRestore)
         {
         _ItemGroup.first->_SetParentNoteBookName(_ItemGroup.second);
         _ItemGroup.first->_SetBeforeDeletedParentNoteBookName(_ItemGroup.second);
 
-        this->addItem(_ItemGroup.first);
+        if (_IsRestore)
+            this->addItem(_ItemGroup.first);
+        else
+            this->insertItem(0, _ItemGroup.first);
         }
 
     /* _HiddenCount()函数实现 */

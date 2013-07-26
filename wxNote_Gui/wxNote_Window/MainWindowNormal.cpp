@@ -486,7 +486,7 @@
             QDate _CreateDate = _CreateTimePair.first;
             QTime _CreateTime = _CreateTimePair.second;
 
-            QPair<_NoteListItem *, _TextEditorWindow *> _RetPair = _NewNoteSlot();
+            QPair<_NoteListItem *, _TextEditorWindow *> _RetPair = _NewNoteSlot(true);
 
             _NoteListItem* _CurrentNoteItem = _RetPair.first;
             _TextEditorWindow* _CurrentEditorWindow = _RetPair.second;
@@ -557,9 +557,9 @@
                                 _ExtractDateAndTimeFromNoteFileName(_Rhs);
 
                         if (_CreateTimePair_Lhs.first != _CreateTimePair_Rhs.first)
-                            return _CreateTimePair_Lhs.first < _CreateTimePair_Rhs.first;
+                            return _CreateTimePair_Lhs.first > _CreateTimePair_Rhs.first;
                         else
-                            return _CreateTimePair_Lhs.second < _CreateTimePair_Rhs.second;
+                            return _CreateTimePair_Lhs.second > _CreateTimePair_Rhs.second;
                         }
 
                     return false;
@@ -1611,7 +1611,7 @@
 
     /* _NewNoteSlot()槽重写 */
     QPair<_NoteListItem*, _TextEditorWindow *>
-        _MainWindowNormal::_NewNoteSlot()
+        _MainWindowNormal::_NewNoteSlot(bool _IsRestore)
         {
         /* 遍历笔记列表, 如果当前笔记列表中存在"无标题笔记", 那么将不会重复创建 */
         for (int _Index = 0; _Index < m_NoteList->count(); _Index++)
@@ -1657,7 +1657,7 @@
         /* 将该新建笔记与其所属的笔记本的名称绑定到一起 */
         QPair<_NoteListItem*, QString> _ItemGroup = qMakePair(_Item, _CurrentNoteBookName);
 
-        m_NoteList->_AddItem(_ItemGroup);
+        m_NoteList->_AddItem(_ItemGroup, _IsRestore);
         m_NoteList->setCurrentItem(_Item);
         m_NoteList->setItemWidget(_Item, _DisplayLabel);
 
@@ -1740,9 +1740,14 @@
         connect(_EditWindow->_GetTextEditor(), SIGNAL(_FinalTabWindowMove2NextTabSignal()),
                 this, SIGNAL(_FinalTabWindowMove2NextTab_BridgeSignal()));
 
-        m_TextEditorStackedLayout->addWidget(_RightSplitter);
+        if (_IsRestore)
+            m_TextEditorStackedLayout->addWidget(_RightSplitter);
+        else
+            m_TextEditorStackedLayout->insertWidget(0, _RightSplitter);
 
-        m_TextEditorStackedLayout->setCurrentIndex(m_NoteList->currentIndex().row());
+        cout << "Current note index = " << m_NoteList->currentIndex().row() << endl;
+//        m_TextEditorStackedLayout->setCurrentIndex(m_NoteList->currentIndex().row());
+        cout << "Cuurrent stack index = " << m_TextEditorStackedLayout->currentIndex() << endl << endl;
 
         /* 设置新建笔记的编辑器焦点 */
         if (_Item)
