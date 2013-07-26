@@ -545,11 +545,6 @@
     /* _SortNoteNameByCreateTime()函数实现 */
     void _MainWindowNormal::_SortNoteNameByCreateTime(QStringList &_Names)
         {
-    #if 0   // DEBUG
-        for (const QString& _Elem : _Names)
-            cout << _Elem << "  |  ";
-        cout << endl << endl;
-    #endif
         std::sort(_Names.begin(), _Names.end(),
                   [this](const QString& _Lhs, const QString& _Rhs)
                     {
