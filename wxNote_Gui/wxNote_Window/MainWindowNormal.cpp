@@ -1745,9 +1745,7 @@
         else
             m_TextEditorStackedLayout->insertWidget(0, _RightSplitter);
 
-        cout << "Current note index = " << m_NoteList->currentIndex().row() << endl;
-//        m_TextEditorStackedLayout->setCurrentIndex(m_NoteList->currentIndex().row());
-        cout << "Cuurrent stack index = " << m_TextEditorStackedLayout->currentIndex() << endl << endl;
+        m_TextEditorStackedLayout->setCurrentIndex(m_NoteList->currentIndex().row());;
 
         /* 设置新建笔记的编辑器焦点 */
         if (_Item)
