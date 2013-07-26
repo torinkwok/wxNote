@@ -423,20 +423,7 @@
         QDir _MainDir(g_LocalFilePath);
         QStringList _DirOrFileNames = _MainDir.entryList();
 
-    #if 0   // DEBUG
-        cout << "Before: " << endl;
-        for (const QString _Elem : _DirOrFileNames)
-            cout << _Elem << endl;
-        cout << endl << endl;
-    #endif
         _SortNoteNameByCreateTime(_DirOrFileNames);
-
-    #if 0   // DEBUG
-        cout << "Before: " << endl;
-        for (const QString _Elem : _DirOrFileNames)
-            cout << _Elem << endl;
-        cout << endl << endl;
-    #endif
 
         std::for_each(_DirOrFileNames.begin() + 2, _DirOrFileNames.end(),
                       [this](const QString& _Elem)
@@ -577,7 +564,7 @@
                         if (_CreateTimePair_Lhs.first != _CreateTimePair_Rhs.first)
                             return _CreateTimePair_Lhs.first < _CreateTimePair_Rhs.first;
                         else
-                            return _CreateTimePair_Rhs.second < _CreateTimePair_Rhs.second;
+                            return _CreateTimePair_Lhs.second < _CreateTimePair_Rhs.second;
                         }
 
                     return false;
