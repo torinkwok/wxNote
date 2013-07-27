@@ -2870,18 +2870,6 @@
                                                               : '/' + _NoteBookName);
         return _CurrentPath;
         }
-#if 1
-    void _MainWindowNormal::_SynchronousSlot()
-        {
-        QString _NoteFileName = wxNote::_GetMatchedNoteFile_byNoteItem(m_NoteList->_GetCurrentItem());
-
-        QPair<QDate, QTime> _TestPair =
-                _ExtractDateAndTimeFromNoteFileName(_NoteFileName);
-
-        cout << _TestPair.first.toString(Qt::ISODate) << "    "
-             << _TestPair.second.toString("hh-mm-ss") << endl << endl;;
-        }
-#endif
 
  ////////////////////////////////////////////////////////////////////////////
 
