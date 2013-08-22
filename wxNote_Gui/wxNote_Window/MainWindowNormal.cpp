@@ -192,11 +192,13 @@
     _NoteListItem* _MainWindowNormal
         ::_GetFirstNoteInSpecifiedNoteBook(const QString &_NoteBookName)
         {
-        _NoteListItem* _FirstNoteItem =
-                m_NoteList->_GetNotesInSpecifiedNoteBook(_NoteBookName,
-                                                         m_wxNoteTabWidget).at(0);
+        QList< _NoteListItem* > _Notes =
+                m_NoteList->_GetNotesInSpecifiedNoteBook(_NoteBookName, m_wxNoteTabWidget);
 
-        return _FirstNoteItem;
+        if ( _Notes.isEmpty() )
+            return nullptr;
+
+        return _Notes.at( 0 );
         }
 
     /* _OptionsSlot()槽重写 */
