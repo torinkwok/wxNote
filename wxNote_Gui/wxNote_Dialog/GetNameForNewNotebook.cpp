@@ -68,7 +68,8 @@
 
         m_WaringLabel = new QLabel(tr("<img src=\":/wxNote_Icons/wrongful.png\">"
                                       "\t笔记本名不能包含下列任何字符："
-                                      "<p>如 \\ / : * ? &quot; &lt; &gt; | ~"));
+                                      "<p>如 \\ / : * ? &quot; &lt; &gt; | ~"
+                                      "<br>记事本开头不能为."));
         m_WaringLabel->setHidden(true);
 
         m_ButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok
@@ -95,7 +96,7 @@
         _MainLayout->addWidget(m_ButtonBox);
 
         setLayout(_MainLayout);
-        setFixedSize(250, sizeHint().height() + 70);
+        setFixedSize(250, sizeHint().height() + 80);
         setWindowTitle(tr("新建笔记本"));
         setFont(wxNote::g_StandardFont);
         setWindowIcon(QIcon(":/wxNote_Icons/wxNoteicon.png"));
@@ -119,7 +120,8 @@
                     || _CurrentText.contains(':') || _CurrentText.contains('*')
                     || _CurrentText.contains('?') || _CurrentText.contains('"')
                     || _CurrentText.contains('<') || _CurrentText.contains('>')
-                    || _CurrentText.contains('|') || _CurrentText.contains('~'));
+                    || _CurrentText.contains('|') || _CurrentText.contains('~')
+                    || (_CurrentText.indexOf('.') == 0));
 
         m_WaringLabel->setHidden(!_ContainsWrongful);
 
