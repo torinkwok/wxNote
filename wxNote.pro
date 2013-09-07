@@ -38,6 +38,13 @@ TARGET = wxNote
 TEMPLATE = app
 CONFIG   += C++11
 
+release: DESTDIR = build/release
+debug:   DESTDIR = build/debug
+
+OBJECTS_DIR = $$DESTDIR/.obj
+MOC_DIR = $$DESTDIR/.moc
+RCC_DIR = $$DESTDIR/.qrc
+
 SOURCES += main.cpp                                             \
     wxNote_Gui/wxNote_Window/AbstractMainWindow.cpp             \
     wxNote_Gui/wxNote_Window/TextEditorWindow.cpp               \
